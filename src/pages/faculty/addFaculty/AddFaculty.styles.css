@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  justify-content: center;
+}
+
+.main-heading {
+  margin: 2rem 0;
+  font-size: 2rem;
+}
+.faculty_form {
+}
+.form_group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.form_group label {
+  font-weight: 600;
+}
+.button_group {
+  display: flex;
+  gap: 1rem;
+}
