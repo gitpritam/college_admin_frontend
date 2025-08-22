@@ -1,59 +1,50 @@
-import { useState } from "react";
+import React from "react";
+import type { IStudent } from "../../../@types/interface/student.interface";
 import Address from "../../../components/form/address/Address.component";
 
-function AddFacultyPage() {
-  const [firstName, setFirstName] = useState("");
-  const [middleName, setMiddleName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [dob, setDob] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [qualification, setQualification] = useState("");
-  const [designation, setDesignation] = useState("");
-  const [department, setDepartment] = useState("");
-  const [experience, setExperience] = useState("");
-  const [password, setPassword] = useState("");
-  const [joiningDate, setJoiningDate] = useState("");
-  const [currentAddress, setCurrentAddress] = useState({
-    address: "",
-    district: "",
-    state: "",
-    country: "",
-    pincode: "",
+function AddStudentPage() {
+  const [formData, setFormData] = React.useState<IStudent>({
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone_number: "",
+    dob: "",
+    guardian_name: "",
+    guardian_phone_number: "",
+    guardian_email: "",
+
+    current_address: {
+      address: "",
+      district: "",
+      state: "",
+      country: "",
+      pincode: "",
+    },
+    permanent_address: {
+      address: "",
+      district: "",
+      state: "",
+      country: "",
+      pincode: "",
+    },
+    department: "",
+    year_of_admission: 0,
+    year_of_passing: 0,
+    remark: "",
   });
-  const [permanentAddress, setPermanentAddress] = useState({
-    address: "",
-    district: "",
-    state: "",
-    country: "",
-    pincode: "",
-  });
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted");
-    console.log(
-      firstName,
-      middleName,
-      lastName,
-      dob,
-      phoneNumber,
-      email,
-      qualification,
-      designation,
-      department,
-      experience,
-      password,
-      joiningDate,
-      currentAddress,
-      permanentAddress
-    );
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    console.log(name, value);
   };
+
   return (
     <div className="flex w-full p-6 flex-col">
-      <h1 className="main-heading font-bold text-xl mb-5">Add Faculty</h1>
+      <h1 className="main-heading font-bold text-xl mb-5">Add Student</h1>
       <form
-        onSubmit={handleSubmit}
-        className="faculty_form flex flex-col w-full"
+        onSubmit={(e) => e.preventDefault()}
+        className="student_form flex flex-col w-full"
       >
         <h1 className="text-lg font-bold mt-2">Basic Details</h1>
         <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
@@ -68,8 +59,8 @@ function AddFacultyPage() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               placeholder="Input your first name"
               required
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              value={formData.first_name}
+              onChange={handleChange}
             />
           </div>
           <div className="form_field flex flex-col w-full gap-2">
@@ -79,8 +70,8 @@ function AddFacultyPage() {
               name="middle_name"
               placeholder="Middle Name"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              onChange={(e) => setMiddleName(e.target.value)}
-              value={middleName}
+              onChange={handleChange}
+              value={formData.middle_name}
             />
           </div>
           <div className="form_field flex flex-col w-full gap-2">
@@ -93,8 +84,8 @@ function AddFacultyPage() {
               placeholder="Last Name"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               required
-              onChange={(e) => setLastName(e.target.value)}
-              value={lastName}
+              onChange={handleChange}
+              value={formData.last_name}
             />
           </div>
         </div>
@@ -109,8 +100,8 @@ function AddFacultyPage() {
               name="dob"
               id="dob"
               required
-              onChange={(e) => setDob(e.target.value)}
-              value={dob}
+              onChange={handleChange}
+              value={formData.dob}
             />
           </div>
           <div className="form_field flex flex-col w-full gap-2">
@@ -124,8 +115,8 @@ function AddFacultyPage() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               type="tel"
               required
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              value={phoneNumber}
+              onChange={handleChange}
+              value={formData.phone_number}
             />
           </div>
           <div className="form_field flex flex-col w-full gap-2">
@@ -139,40 +130,55 @@ function AddFacultyPage() {
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               type="email"
               required
-              onChange={(e) => setEmail(e.target.value)}
-              value={email}
+              onChange={handleChange}
+              value={formData.email}
             />
           </div>
         </div>
         <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
           <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="qualification">
-              Qualification<span className="text-red-500 font-bold">*</span>
+            <label htmlFor="guardian_name">
+              Guardian Name<span className="text-red-500 font-bold">*</span>
             </label>
             <input
-              id="qualification"
-              name="qualification"
-              placeholder="Qualification"
+              id="guardian_name"
+              name="guardian_name"
+              placeholder="Guardian Name"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               required
-              onChange={(e) => setQualification(e.target.value)}
-              value={qualification}
+              onChange={handleChange}
+              value={formData.guardian_name}
             />
           </div>
           <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="designation">
-              Designation<span className="text-red-500 font-bold">*</span>
+            <label htmlFor="guardian_phone_number">
+              Guardian Phone<span className="text-red-500 font-bold">*</span>
             </label>
             <input
-              id="designation"
-              name="designation"
-              placeholder="Designation"
+              id="guardian_phone_number"
+              name="guardian_phone_number"
+              placeholder="Guardian Phone Number"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              type="tel"
               required
-              onChange={(e) => setDesignation(e.target.value)}
-              value={designation}
+              onChange={handleChange}
+              value={formData.guardian_phone_number}
             />
           </div>
+          <div className="form_field flex flex-col w-full gap-2">
+            <label htmlFor="guardian_email">Guardian Email</label>
+            <input
+              id="guardian_email"
+              name="guardian_email"
+              placeholder="Guardian Email"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              type="email"
+              onChange={handleChange}
+              value={formData.guardian_email}
+            />
+          </div>
+        </div>
+        <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="department">
               Department<span className="text-red-500 font-bold">*</span>
@@ -183,61 +189,84 @@ function AddFacultyPage() {
               placeholder="Department"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
               required
-              onChange={(e) => setDepartment(e.target.value)}
-              value={department}
+              onChange={handleChange}
+              value={formData.department}
+            />
+          </div>
+          <div className="form_field flex flex-col w-full gap-2">
+            <label htmlFor="year_of_admission">
+              Year of Admission<span className="text-red-500 font-bold">*</span>
+            </label>
+            <input
+              id="year_of_admission"
+              name="year_of_admission"
+              placeholder="Year of Admission"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              type="number"
+              required
+              onChange={handleChange}
+              value={
+                formData.year_of_admission === 0
+                  ? ""
+                  : formData.year_of_admission
+              }
+            />
+          </div>
+          <div className="form_field flex flex-col w-full gap-2">
+            <label htmlFor="year_of_passing">Year of Passing</label>
+            <input
+              id="year_of_passing"
+              name="year_of_passing"
+              placeholder="Year of Passing"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              type="number"
+              onChange={handleChange}
+              value={
+                formData.year_of_passing === 0 ? "" : formData.year_of_passing
+              }
             />
           </div>
         </div>
-        <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
+        {/* <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
           <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="experience">
-              Experience<span className="text-red-500 font-bold">*</span>
-            </label>
-            <input
-              id="experience"
-              name="experience"
-              placeholder="Experience"
+            <label htmlFor="remark">Remark</label>
+            <textarea
+              id="remark"
+              name="remark"
+              placeholder="Remark"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              required
-              onChange={(e) => setExperience(e.target.value)}
-              value={experience}
+              value={formData.remark}
+              onChange={handleChange}
             />
           </div>
-          <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="password">
-              Password<span className="text-red-500 font-bold">*</span>
-            </label>
-            <input
-              id="password"
-              name="password"
-              placeholder="Password"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              type="password"
-              required
-              onChange={(e) => setPassword(e.target.value)}
-              value={password}
-            />
-          </div>
-          <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="joining_date">
-              Joining Date<span className="text-red-500 font-bold">*</span>
-            </label>
-            <input
-              type="date"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              name="joining_date"
-              id="joining_date"
-              required
-              onChange={(e) => setJoiningDate(e.target.value)}
-              value={joiningDate}
-            />
-          </div>
-        </div>
+        </div> */}
         <div>
           <h1 className="text-lg font-bold mt-2">Current Address</h1>
-          <Address input={currentAddress} setInput={setCurrentAddress} />
+          <Address
+            input={formData.current_address}
+            setInput={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                current_address:
+                  typeof value === "function"
+                    ? value(prev.current_address)
+                    : value,
+              }))
+            }
+          />
           <h1 className="text-lg font-bold mt-2">Permanent Address</h1>
-          <Address input={permanentAddress} setInput={setPermanentAddress} />
+          <Address
+            input={formData.permanent_address}
+            setInput={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                permanent_address:
+                  typeof value === "function"
+                    ? value(prev.permanent_address)
+                    : value,
+              }))
+            }
+          />
         </div>
         <div className="button_group flex gap-3 my-5">
           <button
@@ -258,4 +287,4 @@ function AddFacultyPage() {
   );
 }
 
-export default AddFacultyPage;
+export default AddStudentPage;
