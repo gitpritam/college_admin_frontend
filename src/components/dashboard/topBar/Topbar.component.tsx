@@ -8,7 +8,7 @@ const Topbar = ({
   handleOpen: () => void;
 }) => {
   return (
-    <div className="h-15 bg-white flex border-b-1 border-gray-200 px-5 py-2 w-full items-center gap-5 ">
+    <div className="min-h-[60px] bg-white flex border-b-1 px-5 border-gray-200 w-full items-center gap-5 ">
       {!isOpen && (
         <button
           onClick={handleOpen}
