@@ -34,12 +34,12 @@ const sidebarMenuItems = [
     children: [
       {
         title: "Add Student",
-        path: "/student/add",
+        path: "/students/add",
         icon: MdOutlinePersonAdd,
       },
       {
         title: "Student List",
-        path: "/student/list",
+        path: "/students/list",
         icon: MdOutlineFormatListBulleted,
       },
     ],

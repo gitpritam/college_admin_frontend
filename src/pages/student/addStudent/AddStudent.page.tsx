@@ -5,6 +5,7 @@ import Address from "../../../components/form/address/Address.component";
 function AddStudentPage() {
   const [formData, setFormData] = React.useState<IStudent>({
     first_name: "",
+    middle_name: "",
     last_name: "",
     email: "",
     phone_number: "",
@@ -33,17 +34,59 @@ function AddStudentPage() {
     remark: "",
   });
 
+  const handleReset = () => {
+    setFormData({
+      first_name: "",
+      middle_name: "",
+      last_name: "",
+      email: "",
+      phone_number: "",
+      dob: "",
+      guardian_name: "",
+      guardian_phone_number: "",
+      guardian_email: "",
+
+      current_address: {
+        address: "",
+        district: "",
+        state: "",
+        country: "",
+        pincode: "",
+      },
+      permanent_address: {
+        address: "",
+        district: "",
+        state: "",
+        country: "",
+        pincode: "",
+      },
+      department: "",
+      year_of_admission: 0,
+      year_of_passing: 0,
+      remark: "",
+    });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     console.log(name, value);
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(formData);
+  };
+
+  //useEffect
+  //fetch
+  //axios config
+
   return (
     <div className="flex w-full p-6 flex-col">
       <h1 className="main-heading font-bold text-xl mb-5">Add Student</h1>
       <form
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={handleSubmit}
         className="student_form flex flex-col w-full"
       >
         <h1 className="text-lg font-bold mt-2">Basic Details</h1>
@@ -276,7 +319,8 @@ function AddStudentPage() {
             Submit
           </button>
           <button
-            type="reset"
+            type="button"
+            onClick={handleReset}
             className="rounded-md bg-red-600 px-4 py-2 cursor-pointer text-white hover:bg-red-700"
           >
             Reset
