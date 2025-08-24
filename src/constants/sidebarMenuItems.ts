@@ -1,43 +1,46 @@
+import {
+  MdOutlineDashboard,
+  MdOutlineFormatListBulleted,
+  MdOutlinePerson,
+  MdOutlinePersonAdd,
+} from "react-icons/md";
+
 const sidebarMenuItems = [
   {
     title: "Dashboard",
-    // icon: <MdOutlineDashboard size={20} />,
+    icon: MdOutlineDashboard,
     path: "/dashboard",
     children: [],
   },
   {
     title: "Faculty",
-    // icon: <MdOutlinePerson size={20} />,
-    path: "/faculty",
+    icon: MdOutlinePerson,
     children: [
       {
         title: "Add Faculty",
         path: "/faculty/add",
+        icon: MdOutlinePersonAdd,
       },
       {
         title: "Faculty List",
         path: "/faculty/list",
-      },
-      {
-        title: "View Faculty",
-        path: "/faculty/view",
+        icon: MdOutlineFormatListBulleted,
       },
     ],
   },
   {
     title: "Students",
+    icon: MdOutlinePerson,
     children: [
       {
         title: "Add Student",
-        path: "/students/add",
+        path: "/student/add",
+        icon: MdOutlinePersonAdd,
       },
       {
         title: "Student List",
-        path: "/students/list",
-      },
-      {
-        title: "View Student",
-        path: "/students/view",
+        path: "/student/list",
+        icon: MdOutlineFormatListBulleted,
       },
     ],
   },

@@ -1,7 +1,11 @@
 import { FaChevronLeft } from "react-icons/fa";
-import { MdOutlineDashboard, MdOutlinePerson } from "react-icons/md";
-import { Link } from "react-router";
+import {
+  MdOutlineKeyboardArrowDown,
+  MdOutlineKeyboardArrowUp,
+} from "react-icons/md";
+import { Link, useLocation } from "react-router";
 import sidebarMenuItems from "../../../constants/sidebarMenuItems";
+import { useState } from "react";
 
 function Sidebar({
   isOpen,
@@ -10,30 +14,37 @@ function Sidebar({
   isOpen: boolean;
   handleClose: () => void;
 }) {
+  const location = useLocation();
+  const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  console.log(location);
   return (
     <aside
       id="sidebar-multi-level-sidebar"
       className={isOpen ? " z-40 min-w-64  h-screen" : "hidden"}
       aria-label="Sidebar"
     >
-      <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
-        <div className="flex justify-end pl-2.5 ">
+      <div className="h-full  overflow-y-auto bg-gray-800">
+        <div className="z-50 sticky top-0 flex px-3 py-4 justify-end h-15 border-b-1 border-b-[#29384d] bg-gray-800 shadow-md ">
+          {/* Single main button */}
           <button
             onClick={handleClose}
-            className="p-2  rounded-full cursor-pointer hover:bg-gray-700 transition"
+            className="items-center justify-center  h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700 transition "
           >
             <FaChevronLeft color="white" size={15} />
           </button>
         </div>
-        <ul className="space-y-2 font-medium">
+        <ul className="space-y-2 px-3 py-4 font-medium">
           {sidebarMenuItems.map((item) =>
             item.children.length === 0 ? (
               <li key={item.path}>
                 <Link
                   to={item.path || "#"}
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className={`flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group ${
+                    location.pathname === item.path ? "bg-[#244061]" : ""
+                  }`}
                 >
-                  <MdOutlineDashboard size={20} />
+                  {/* <MdOutlineDashboard size={20} /> */}
+                  {item.icon && <item.icon size={20} />}
 
                   <span className="ms-3">{item.title}</span>
                 </Link>
@@ -41,26 +52,42 @@ function Sidebar({
             ) : (
               <li key={item.title}>
                 <Link
+                  onClick={() => {
+                    setOpenSubmenu(
+                      openSubmenu === item.title ? null : item.title
+                    );
+                  }}
                   to={item.path || "#"}
-                  className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  className="flex items-center p-2 text-white rounded-lg hover:bg-gray-700 group"
                 >
-                  <MdOutlineDashboard size={20} />
-
-                  <span className="ms-3">{item.title}</span>
+                  {item.icon && <item.icon size={20} />}
+                  <span className="ms-3 flex-grow">{item.title}</span>
+                  {openSubmenu === item.title ? (
+                    <MdOutlineKeyboardArrowUp />
+                  ) : (
+                    <MdOutlineKeyboardArrowDown />
+                  )}
                 </Link>
-                <ul key={item.title} className="space-y-2">
-                  {item.children.map((child: any) => (
-                    <li key={child.path}>
-                      <Link
-                        to={child.path}
-                        className="flex items-center ml-5 p-2 font-light text-sm text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                      >
-                        <MdOutlineDashboard size={20} />
-                        <span className="ms-3">{child.title}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                {openSubmenu === item.title && (
+                  <ul key={item.title} className="space-y-2">
+                    {item.children.map((child: any) => (
+                      <li key={child.path}>
+                        {/* child main button */}
+                        <Link
+                          to={child.path}
+                          className={`flex items-center ml-5 p-2  text-white rounded-lg hover:bg-gray-700 group ${
+                            location.pathname === child.path
+                              ? "bg-[#244061]"
+                              : ""
+                          }`}
+                        >
+                          {child.icon && <child.icon size={18} />}
+                          <span className="ms-3">{child.title}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             )
           )}
