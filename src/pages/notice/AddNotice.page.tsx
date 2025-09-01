@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import type { INotice } from "../../@types/interface/notice.interface";
+import { noticeValidationSchema } from "../../validations/notice.validation";
+import z from "zod";
+
 function AddNoticePage() {
   const [formData, setFormData] = React.useState<INotice>({
     title: "",
     description: "",
     year: 0,
-    });
- 
+  });
+  const [error, setError] = useState<
+    | {
+        title?: { errors: string[] };
+        description?: { errors: string[] };
+        year?: { errors: string[] };
+      }
+    | undefined
+  >(undefined);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -22,15 +32,31 @@ function AddNoticePage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+    setError(undefined);
+    try {
+      const validateData = noticeValidationSchema
+        .omit({ notice_id: true, posted_by: true })
+        .safeParse(formData);
+      console.log("Validated data:", validateData);
+      if (!validateData.success) {
+        const errors = z.treeifyError(validateData.error).properties;
+        console.log(errors);
+        setError(errors);
+      }
+
+      console.log(validateData.data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
     <div className="flex w-full p-6 flex-col">
       <h1 className="main-heading font-bold text-xl mb-5">Add Notice</h1>
       <form
+        noValidate
         onSubmit={handleSubmit}
         className="notice_form flex flex-col w-full"
       >
@@ -50,7 +76,10 @@ function AddNoticePage() {
               value={formData.title}
               onChange={handleChange}
             />
-          </div> 
+            {error?.title && (
+              <p className="text-red-500">* {error.title.errors[0]}</p>
+            )}
+          </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="description">
               description<span className="text-red-500 font-bold">*</span>
@@ -65,8 +94,11 @@ function AddNoticePage() {
               value={formData.description}
               onChange={handleChange}
             />
-          </div> 
-           <div className="form_field flex flex-col w-full gap-2">
+            {error?.description && (
+              <p className="text-red-500">* {error.description.errors[0]}</p>
+            )}
+          </div>
+          <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="year">
               year<span className="text-red-500 font-bold">*</span>
             </label>
@@ -80,7 +112,10 @@ function AddNoticePage() {
               value={formData.year}
               onChange={handleChange}
             />
-          </div> 
+            {error?.year && (
+              <p className="text-red-500">* {error.year.errors[0]}</p>
+            )}
+          </div>
         </div>
         <div className="button_group flex gap-3 my-5">
           <button
@@ -91,7 +126,7 @@ function AddNoticePage() {
           </button>
           <button
             type="button"
-            onClick={ handleReset}
+            onClick={handleReset}
             className="rounded-md bg-red-600 px-4 py-2 cursor-pointer text-white hover:bg-red-700"
           >
             Reset
@@ -99,5 +134,6 @@ function AddNoticePage() {
         </div>
       </form>
     </div>
-  ); };
+  );
+}
 export default AddNoticePage;
