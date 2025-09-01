@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router";
 import DashboardLayout from "../layout/dashboard.layout";
 import AddFacultyPage from "../pages/faculty/addFaculty/AddFaculty.page";
 import AddStudentPage from "../pages/student/addStudent/AddStudent.page";
+import AddNoticePage from "../pages/notice/AddNotice.page";
 
 const Router = createBrowserRouter([
   {
@@ -35,6 +36,19 @@ const Router = createBrowserRouter([
           {
             path: "add",
             element: <AddStudentPage />,
+          },
+        ],
+      },
+      {
+        path: "notice",
+        children: [
+          {
+            path: "list", 
+            element: <h1>Notice List</h1>,
+          },
+          {
+            path: "add", 
+            element: <AddNoticePage />,
           },
         ],
       },
