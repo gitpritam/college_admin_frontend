@@ -38,7 +38,7 @@ function AddNoticePage() {
         <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="title">
-              First Name<span className="text-red-500 font-bold">*</span>
+              title<span className="text-red-500 font-bold">*</span>
             </label>
             <input
               type="text"
@@ -52,20 +52,35 @@ function AddNoticePage() {
             />
           </div> 
           <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="yearl">
-              Email<span className="text-red-500 font-bold">*</span>
+            <label htmlFor="description">
+              description<span className="text-red-500 font-bold">*</span>
             </label>
             <input
+              type="text"
+              id="description"
+              name="description"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              placeholder="Input notice description"
+              required
+              value={formData.description}
+              onChange={handleChange}
+            />
+          </div> 
+           <div className="form_field flex flex-col w-full gap-2">
+            <label htmlFor="year">
+              year<span className="text-red-500 font-bold">*</span>
+            </label>
+            <input
+              type="number"
               id="year"
               name="year"
-              placeholder="Year"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              type="year"
+              placeholder="Input notice year"
               required
-              onChange={handleChange}
               value={formData.year}
+              onChange={handleChange}
             />
-          </div>      
+          </div> 
         </div>
         <div className="button_group flex gap-3 my-5">
           <button

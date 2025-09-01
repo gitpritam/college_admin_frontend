@@ -48,7 +48,7 @@ const Router = createBrowserRouter([
           },
           {
             path: "add", 
-            element: <AddNoticePage />,
+            element: <AddNoticePage/>,
           },
         ],
       },
