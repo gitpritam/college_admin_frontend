@@ -76,10 +76,10 @@ function AddEventPage() {
           </div> 
            <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="start_date">
-              year<span className="text-red-500 font-bold">*</span>
+              start_date<span className="text-red-500 font-bold">*</span>
             </label>
             <input
-              type="string"
+              type="date"
               id="start_date"
               name="start_date"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
@@ -91,10 +91,10 @@ function AddEventPage() {
           </div> 
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="end_date">
-              year<span className="text-red-500 font-bold">*</span>
+              end_date<span className="text-red-500 font-bold">*</span>
             </label>
             <input
-              type="string"
+              type="date"
               id="end_date"
               name="end_date"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
@@ -106,10 +106,10 @@ function AddEventPage() {
           </div> 
            <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="start_time">
-              year<span className="text-red-500 font-bold">*</span>
+              start_time<span className="text-red-500 font-bold">*</span>
             </label>
             <input
-              type="string"
+              type="time"
               id="start_time"
               name="start_time"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
@@ -121,25 +121,24 @@ function AddEventPage() {
           </div> 
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="end_time">
-              year<span className="text-red-500 font-bold">*</span>
+              end_time
             </label>
             <input
-              type="string"
+              type="time"
               id="end_time"
               name="end_time"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              placeholder="Input end_time"
-              required
+              placeholder="Input end_time (Optional)"
               value={formData.end_time}
               onChange={handleChange}
             />
           </div> 
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="venue">
-              year<span className="text-red-500 font-bold">*</span>
+             venue<span className="text-red-500 font-bold">*</span>
             </label>
             <input
-              type="string"
+              type="text"
               id="venue"
               name="venue"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "

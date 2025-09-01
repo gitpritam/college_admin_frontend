@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import DashboardLayout from "../layout/dashboard.layout";
 import AddFacultyPage from "../pages/faculty/addFaculty/AddFaculty.page";
 import AddStudentPage from "../pages/student/addStudent/AddStudent.page";
@@ -41,8 +41,13 @@ const Router = createBrowserRouter([
         ],
       },
       {
-        path: "notice",
-        children: [
+        path: "notices",
+        children: [//new jinis sekha66i..  /notice e request korle amra mootice list e redirect kore debo
+          {
+            index: true,
+            element: <Navigate to="list" replace />,
+
+          },
           {
             path: "list", 
             element: <h1>Notice List</h1>,
