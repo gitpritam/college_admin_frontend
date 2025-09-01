@@ -3,6 +3,7 @@ import DashboardLayout from "../layout/dashboard.layout";
 import AddFacultyPage from "../pages/faculty/addFaculty/AddFaculty.page";
 import AddStudentPage from "../pages/student/addStudent/AddStudent.page";
 import AddNoticePage from "../pages/notice/AddNotice.page";
+import AddEventPage from "../pages/eventss/AddEvent.page";
 
 const Router = createBrowserRouter([
   {
@@ -49,6 +50,19 @@ const Router = createBrowserRouter([
           {
             path: "add", 
             element: <AddNoticePage/>,
+          },
+        ],
+      },
+       {
+        path: "events",
+        children: [
+          {
+            path: "list",
+            element: <h1>Event List</h1>,
+          },
+          {
+            path: "add",
+            element: <AddEventPage />,
           },
         ],
       },
