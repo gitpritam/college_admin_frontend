@@ -18,10 +18,10 @@ function AddNoticePage() {
     | undefined
   >(undefined);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    console.log(name, value);
   };
 
   const handleReset = () => {
@@ -58,11 +58,13 @@ function AddNoticePage() {
       <form
         noValidate
         onSubmit={handleSubmit}
-        className="notice_form flex flex-col w-full"
+        className="notice_form flex flex-col w-full "
       >
         <h1 className="text-lg font-bold mt-2">Basic Details</h1>
-        <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
-          <div className="form_field flex flex-col w-full gap-2">
+        <div className="form_group flex gap-3 my-1 flex-col">
+          <div className="flex flex-col lg:flex-row gap-2 ">
+
+          <div className="form_field flex flex-col gap-2  grow">
             <label htmlFor="title">
               title<span className="text-red-500 font-bold">*</span>
             </label>
@@ -70,35 +72,19 @@ function AddNoticePage() {
               type="text"
               id="title"
               name="title"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
               placeholder="Input notice title"
               required
               value={formData.title}
               onChange={handleChange}
-            />
+              />
+
             {error?.title && (
               <p className="text-red-500">* {error.title.errors[0]}</p>
             )}
           </div>
-          <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="description">
-              description<span className="text-red-500 font-bold">*</span>
-            </label>
-            <input
-              type="text"
-              id="description"
-              name="description"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              placeholder="Input notice description"
-              required
-              value={formData.description}
-              onChange={handleChange}
-            />
-            {error?.description && (
-              <p className="text-red-500">* {error.description.errors[0]}</p>
-            )}
-          </div>
-          <div className="form_field flex flex-col w-full gap-2">
+          
+          <div className="form_field flex flex-col gap-2 grow lg:max-w-[25%]">
             <label htmlFor="year">
               year<span className="text-red-500 font-bold">*</span>
             </label>
@@ -106,14 +92,35 @@ function AddNoticePage() {
               type="number"
               id="year"
               name="year"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
               placeholder="Input notice year"
               required
               value={formData.year}
               onChange={handleChange}
-            />
+              />
             {error?.year && (
               <p className="text-red-500">* {error.year.errors[0]}</p>
+            )}
+          </div>
+            </div>
+
+          
+          <div className="form_field flex flex-col grow gap-2  ">
+            <label htmlFor="description">
+              description<span className="text-red-500 font-bold text-lg">*</span>
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 placeholder:absolute placeholder:top-2 placeholder:left-3 placeholder:text-gray-400"
+              placeholder="Input notice description"
+              required
+              value={formData.description}
+              onChange={handleChange}
+               rows={10}
+            />
+            {error?.description && (
+              <p className="text-red-500">* {error.description.errors[0]}</p>
             )}
           </div>
         </div>

@@ -1,5 +1,7 @@
 import { useState } from "react";
+import z from "zod";
 import Address from "../../../components/form/address/Address.component";
+import { facultyValidationSchema } from "../../../validations/faculty.validation";
 
 function AddFacultyPage() {
   const [firstName, setFirstName] = useState("");
@@ -28,25 +30,66 @@ function AddFacultyPage() {
     country: "",
     pincode: "",
   });
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Form submitted");
-    console.log(
-      firstName,
-      middleName,
-      lastName,
-      dob,
-      phoneNumber,
-      email,
-      qualification,
-      designation,
-      department,
-      experience,
-      password,
-      joiningDate,
-      currentAddress,
-      permanentAddress
-    );
+
+  const [error, setError] = useState<
+      | {
+          first_name: { errors: string[] };
+          middle_name?: { errors: string[] };
+          last_name: { errors: string[] };
+          dob: { errors: string[] };
+          phoneNumber:{ errors: string[] };
+          email: { errors: string[] };
+          qualification: { errors: string[] };
+          designation: { errors: string[] };
+          department: { errors: string[] };
+          experience: { errors: string[] };
+          password: { errors: string[] };
+          joiningDate: { errors: string[] };
+        }
+      | undefined
+    >(undefined);
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+      };
+
+    const handleReset = () => {
+    setFormData({
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      dob: "",
+      phoneNumber: "",
+      email: "",
+      qualification: "",
+      designation: "",
+      department: "",
+      experience: "",
+      password: "",
+      joiningDate: "",
+    });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setError(undefined);
+      try {
+        const validateData = facultyValidationSchema
+          .omit({ faculty_id: true, posted_by: true })
+          .safeParse(formData);
+        console.log("Validated data:", validateData);
+        if (!validateData.success) {
+          const errors = z.treeifyError(validateData.error).properties;
+          console.log(errors);
+          setError(errors);
+        }
+  
+        console.log(validateData.data);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+    };
   };
   return (
     <div className="flex w-full p-6 flex-col">
@@ -71,6 +114,9 @@ function AddFacultyPage() {
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
+            {error?.first_name && (
+              <p className="text-red-500">* {error.first_name.errors[0]}</p>
+            )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="middle_name">Middle Name</label>
@@ -82,6 +128,9 @@ function AddFacultyPage() {
               onChange={(e) => setMiddleName(e.target.value)}
               value={middleName}
             />
+            {error?.middle_name && (
+              <p className="text-red-500">* {error.middle_name.errors[0]}</p>
+            )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="last_name">
@@ -96,6 +145,9 @@ function AddFacultyPage() {
               onChange={(e) => setLastName(e.target.value)}
               value={lastName}
             />
+            {error?.last_name && (
+              <p className="text-red-500">* {error.last_name.errors[0]}</p>
+            )}
           </div>
         </div>
         <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
@@ -112,6 +164,9 @@ function AddFacultyPage() {
               onChange={(e) => setDob(e.target.value)}
               value={dob}
             />
+            {error?.dob && (
+              <p className="text-red-500">* {error.dob.errors[0]}</p>
+            )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="phone_number">
@@ -127,6 +182,9 @@ function AddFacultyPage() {
               onChange={(e) => setPhoneNumber(e.target.value)}
               value={phoneNumber}
             />
+            {error?.phoneNumber && (
+              <p className="text-red-500">* {error.phoneNumber.errors[0]}</p>
+            )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="email">
@@ -142,6 +200,9 @@ function AddFacultyPage() {
               onChange={(e) => setEmail(e.target.value)}
               value={email}
             />
+            {error?.email && (
+              <p className="text-red-500">* {error.email.errors[0]}</p>
+            )}
           </div>
         </div>
         <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
@@ -158,6 +219,9 @@ function AddFacultyPage() {
               onChange={(e) => setQualification(e.target.value)}
               value={qualification}
             />
+            {error?.qualification && (
+              <p className="text-red-500">* {error.qualification.errors[0]}</p>
+            )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="designation">
@@ -172,6 +236,9 @@ function AddFacultyPage() {
               onChange={(e) => setDesignation(e.target.value)}
               value={designation}
             />
+            {error?.designation && (
+              <p className="text-red-500">* {error.designation.errors[0]}</p>
+            )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="department">
@@ -186,6 +253,9 @@ function AddFacultyPage() {
               onChange={(e) => setDepartment(e.target.value)}
               value={department}
             />
+            {error?.department && (
+              <p className="text-red-500">* {error.department.errors[0]}</p>
+            )}
           </div>
         </div>
         <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
@@ -202,6 +272,9 @@ function AddFacultyPage() {
               onChange={(e) => setExperience(e.target.value)}
               value={experience}
             />
+            {error?.experience && (
+              <p className="text-red-500">* {error.experience.errors[0]}</p>
+            )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="password">
@@ -217,6 +290,9 @@ function AddFacultyPage() {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
+            {error?.password && (
+              <p className="text-red-500">* {error.password.errors[0]}</p>
+            )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="joining_date">
@@ -231,6 +307,9 @@ function AddFacultyPage() {
               onChange={(e) => setJoiningDate(e.target.value)}
               value={joiningDate}
             />
+            {error?.joiningDate && (
+              <p className="text-red-500">* {error.joiningDate.errors[0]}</p>
+            )}
           </div>
         </div>
         <div>
@@ -257,5 +336,4 @@ function AddFacultyPage() {
     </div>
   );
 }
-
 export default AddFacultyPage;
