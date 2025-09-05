@@ -4,6 +4,7 @@ import AddFacultyPage from "../pages/faculty/addFaculty/AddFaculty.page";
 import AddStudentPage from "../pages/student/addStudent/AddStudent.page";
 import AddNoticePage from "../pages/notice/AddNotice.page";
 import AddEventPage from "../pages/eventss/AddEvent.page";
+import LoginPage from "../pages/auth/login.page";
 
 const Router = createBrowserRouter([
   {
@@ -42,23 +43,23 @@ const Router = createBrowserRouter([
       },
       {
         path: "notices",
-        children: [//new jinis sekha66i..  /notice e request korle amra mootice list e redirect kore debo
+        children: [
+          //new jinis sekha66i..  /notice e request korle amra mootice list e redirect kore debo
           {
             index: true,
             element: <Navigate to="list" replace />,
-
           },
           {
-            path: "list", 
+            path: "list",
             element: <h1>Notice List</h1>,
           },
           {
-            path: "add", 
-            element: <AddNoticePage/>,
+            path: "add",
+            element: <AddNoticePage />,
           },
         ],
       },
-       {
+      {
         path: "events",
         children: [
           {
@@ -75,10 +76,7 @@ const Router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: (
-      <h1>Login page</h1>
-      // <Login />
-    ),
+    element: <LoginPage />,
   },
   {
     path: "*",

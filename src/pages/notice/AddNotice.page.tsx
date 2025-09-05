@@ -18,6 +18,7 @@ function AddNoticePage() {
       }
     | undefined
   >(undefined);
+  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -36,6 +37,7 @@ function AddNoticePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSuccess(null);
     setError(undefined);
     try {
       const validateData = noticeValidationSchema
@@ -55,8 +57,15 @@ function AddNoticePage() {
       const response = await api.post("/notice", payload);
       console.log(response);
       console.log(validateData.data);
+      setFormData({
+        title: "",
+        description: "",
+        year: 0,
+      });
+      setIsSuccess(true);
     } catch (error) {
       console.error("Error submitting form:", error);
+      setIsSuccess(false);
     }
   };
 
@@ -147,6 +156,72 @@ function AddNoticePage() {
           </button>
         </div>
       </form>
+      {isSuccess && (
+        <div
+          className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 relative"
+          role="alert"
+        >
+          <div className="flex items-center justify-between">
+            <span>Notice added successfully.</span>
+            <button
+              type="button"
+              onClick={() => setIsSuccess(null)}
+              className="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+              aria-label="Close"
+            >
+              <span className="sr-only">Close</span>
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+      {!isSuccess && isSuccess !== null && (
+        <div
+          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 relative"
+          role="alert"
+        >
+          <div className="flex items-center justify-between">
+            <span>Failed to add notice.</span>
+            <button
+              type="button"
+              onClick={() => setIsSuccess(null)}
+              className="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+              aria-label="Close"
+            >
+              <span className="sr-only">Close</span>
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
