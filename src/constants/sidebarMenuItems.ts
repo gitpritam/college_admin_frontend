@@ -1,4 +1,5 @@
 import {
+  MdCelebration,
   MdOutlineDashboard,
   MdOutlineFormatListBulleted,
   MdOutlinePerson,
@@ -45,39 +46,39 @@ const sidebarMenuItems = [
     ],
   },
   {
-  title: "Notices",
-  icon: MdOutlinePerson,
-  children:[
-    {
-      title: "Add Notice",
-      path: "/notices/add",
-      icon: MdOutlinePersonAdd,
-    },
+    title: "Notices",
+    icon: MdOutlinePerson,
+    children: [
+      {
+        title: "Add Notice",
+        path: "/notices/add",
+        icon: MdOutlinePersonAdd,
+      },
 
-    {
-      title: "Add Notice",
-      path: "/notices/list",
-      icon: MdOutlineFormatListBulleted,
-    },
-  ],
-},
-{
- title: "Events",
-  icon: MdOutlinePerson,
-  children:[
-    {
-      title: "Add Event",
-      path: "/events/add",
-      icon: MdOutlinePersonAdd,
-    },
+      {
+        title: "Add Notice",
+        path: "/notices/list",
+        icon: MdOutlineFormatListBulleted,
+      },
+    ],
+  },
+  {
+    title: "Events",
+    icon: MdCelebration,
+    children: [
+      {
+        title: "Add Event",
+        path: "/events/add",
+        icon: MdOutlinePersonAdd,
+      },
 
-    {
-      title: "Add Event",
-      path: "/events/list",
-      icon: MdOutlineFormatListBulleted,
-    },
-  ],
-},
+      {
+        title: "Add Event",
+        path: "/events/list",
+        icon: MdOutlineFormatListBulleted,
+      },
+    ],
+  },
 ];
 
 export default sidebarMenuItems;

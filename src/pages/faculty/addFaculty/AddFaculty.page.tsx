@@ -3,11 +3,12 @@ import Address from "../../../components/form/address/Address.component";
 import type { IFaculty } from "../../../@types/interface/faculty.interface";
 import z from "zod";
 import { facultyValidationSchema } from "../../../validations/faculty.validation";
+import { addressValidationSchema } from "../../../validations/address.validation";
 
 function AddFacultyPage() {
   const [formData, setFormData] = React.useState<IFaculty>({
     first_name: "",
-    middle_name:"",
+    middle_name: "",
     last_name: "",
     dob: "",
     phone_number: "",
@@ -25,7 +26,7 @@ function AddFacultyPage() {
       country: "",
       pincode: "",
     },
-    permanent_address : {
+    permanent_address: {
       address: "",
       district: "",
       state: "",
@@ -35,36 +36,52 @@ function AddFacultyPage() {
   });
 
   const [error, setError] = useState<
-     | {
-         first_name?: { errors: string[] };
-         middle_name?: { errors: string[] };
-         last_name?: { errors: string[] };
-         dob?: { errors: string[] };
-         phone_number?: { errors: string[] };
-         email?: { errors: string[] };
-         qualification?: { errors: string[] };
-         designation?: { errors: string[] };
-         department?: { errors: string[] };
-         experience?: { errors: string[] };
-         password?: { errors: string[] };
-         joining_date?: { errors: string[] };
-         current_address?: { errors: string[] };
-         permanent_address?: { errors: string[] };
-       }
-     | undefined
-   >(undefined);
-   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
-  
-    
-     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-         const { name, value } = e.target;
-         setFormData({ ...formData, [name]: value });
-         console.log(name, value);
-       };
-     
+    | {
+        first_name?: { errors: string[] };
+        middle_name?: { errors: string[] };
+        last_name?: { errors: string[] };
+        dob?: { errors: string[] };
+        phone_number?: { errors: string[] };
+        email?: { errors: string[] };
+        qualification?: { errors: string[] };
+        designation?: { errors: string[] };
+        department?: { errors: string[] };
+        experience?: { errors: string[] };
+        password?: { errors: string[] };
+        joining_date?: { errors: string[] };
+      }
+    | undefined
+  >(undefined);
+  const [currentAddressError, setCurrentAddressError] = useState<
+    | {
+        address?: { errors: string[] };
+        district?: { errors: string[] };
+        state?: { errors: string[] };
+        pincode?: { errors: string[] };
+        country?: { errors: string[] };
+      }
+    | undefined
+  >(undefined);
+  const [permanentAddressError, setPermanentAddressError] = useState<
+    | {
+        address?: { errors: string[] };
+        district?: { errors: string[] };
+        state?: { errors: string[] };
+        pincode?: { errors: string[] };
+        country?: { errors: string[] };
+      }
+    | undefined
+  >(undefined);
+  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
 
-    const handleReset = () => {
-    setFormData ({
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    console.log(name, value);
+  };
+
+  const handleReset = () => {
+    setFormData({
       first_name: "",
       middle_name: "",
       last_name: "",
@@ -91,35 +108,60 @@ function AddFacultyPage() {
         country: "",
         pincode: "",
       },
-    }); 
+    });
+    setError(undefined);
+    setCurrentAddressError(undefined);
+    setPermanentAddressError(undefined);
+    setIsSuccess(null);
   };
 
-  
   const handleSubmit = async (e: React.FormEvent) => {
-       e.preventDefault();
-       setError(undefined);
-       try {
-         const validateData = facultyValidationSchema
-           .omit({ faculty_id: true, posted_by: true })
-           .safeParse(formData);
-         console.log("Validated data:", validateData);
-         if (!validateData.success) {
-           const errors = z.treeifyError(validateData.error).properties;
-           console.log(errors);
-           setError(errors);
-         }
-         console.log(validateData.data);
-       } catch (error) {
-         console.error("Error submitting form:", error);
-       }
-     };
-   
-   
+    e.preventDefault();
+    setError(undefined);
+    setCurrentAddressError(undefined);
+    setPermanentAddressError(undefined);
+    console.log(formData);
+    try {
+      const validateData = facultyValidationSchema
+        .omit({ faculty_id: true, posted_by: true })
+        .safeParse(formData);
+      const currentAddressValidateData = addressValidationSchema.safeParse(
+        formData.current_address
+      );
+      const permanentAddressValidateData = addressValidationSchema.safeParse(
+        formData.permanent_address
+      );
+
+      if (!currentAddressValidateData.success) {
+        const errors = z.treeifyError(
+          currentAddressValidateData.error
+        ).properties;
+        setCurrentAddressError(errors);
+      }
+      if (!permanentAddressValidateData.success) {
+        const errors = z.treeifyError(
+          permanentAddressValidateData.error
+        ).properties;
+        setPermanentAddressError(errors);
+      }
+      console.log("Validated data:", validateData);
+      if (!validateData.success) {
+        const errors = z.treeifyError(validateData.error).properties;
+        console.log(errors);
+        setError(errors);
+      }
+      console.log(validateData.data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  };
+
+  console.log(error);
   return (
     <div className="flex w-full p-6 flex-col">
       <h1 className="main-heading font-bold text-xl mb-5">Add Faculty</h1>
       <form
-      noValidate
+        noValidate
         onSubmit={handleSubmit}
         className="faculty_form flex flex-col w-full"
       >
@@ -137,7 +179,7 @@ function AddFacultyPage() {
               placeholder="Input your first name"
               required
               value={formData.first_name}
-              onChange ={handleChange}
+              onChange={handleChange}
             />
             {error?.first_name && (
               <p className="text-red-500">* {error.first_name.errors[0]}</p>
@@ -150,7 +192,7 @@ function AddFacultyPage() {
               name="middle_name"
               placeholder="Middle Name"
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              onChange = {handleChange}
+              onChange={handleChange}
               value={formData.middle_name}
             />
             {error?.middle_name && (
@@ -330,7 +372,7 @@ function AddFacultyPage() {
               id="joining_date"
               required
               onChange={handleChange}
-              value ={formData.joining_date}
+              value={formData.joining_date}
             />
             {error?.joining_date && (
               <p className="text-red-500">* {error.joining_date.errors[0]}</p>
@@ -338,8 +380,9 @@ function AddFacultyPage() {
           </div>
         </div>
         <div>
-        <h1 className="text-lg font-bold mt-2">Current Address</h1>
+          <h1 className="text-lg font-bold mt-2">Current Address</h1>
           <Address
+            error={currentAddressError}
             input={formData.current_address}
             setInput={(value) =>
               setFormData((prev) => ({
@@ -353,6 +396,7 @@ function AddFacultyPage() {
           />
           <h1 className="text-lg font-bold mt-2">Permanent Address</h1>
           <Address
+            error={permanentAddressError}
             input={formData.permanent_address}
             setInput={(value) =>
               setFormData((prev) => ({
@@ -381,13 +425,13 @@ function AddFacultyPage() {
           </button>
         </div>
       </form>
-       {isSuccess && (
+      {isSuccess && (
         <div
           className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 relative"
           role="alert"
         >
           <div className="flex items-center justify-between">
-            <span>Faculty  added successfully.</span>
+            <span>Faculty added successfully.</span>
             <button
               type="button"
               onClick={() => setIsSuccess(null)}
@@ -447,7 +491,7 @@ function AddFacultyPage() {
           </div>
         </div>
       )}
-      </div>
+    </div>
   );
-  }
+}
 export default AddFacultyPage;

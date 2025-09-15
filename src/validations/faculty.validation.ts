@@ -19,9 +19,7 @@ export const facultyValidationSchema = z.object({
     .min(2, "Last name should be at least 2 characters")
     .max(50, "Last name should be at most 50 characters"),
 
-  dob: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "DOB is madatory"),
+  dob: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "DOB is madatory"),
 
   phone_number: z
     .string()
@@ -71,14 +69,4 @@ export const facultyValidationSchema = z.object({
     .min(2, "Posted by should be at least 2 characters")
     .max(20, "Posted by should be at most 20 characters")
     .optional(),
-
-    /*current_address: z
-    .string()
-    .min(2, "Current address should be at least 2 characters")
-    .max(100, "Current address should be at most 100 characters"),
-
-    permanent_address: z
-    .string()
-    .min(2, "Permanent address should be at least 2 characters")
-    .max(100, "Permanent address should be at most 100 characters"),*/
 });

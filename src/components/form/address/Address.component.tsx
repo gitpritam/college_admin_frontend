@@ -3,9 +3,11 @@ import type { IAddress } from "../../../@types/interface/address.interface";
 interface AddressProps {
   input: IAddress;
   setInput: React.Dispatch<React.SetStateAction<IAddress>>;
+  error: any;
 }
 
-function Address({ input, setInput }: AddressProps) {
+function Address({ input, setInput, error }: AddressProps) {
+  console.log(error);
   return (
     <>
       <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
@@ -25,6 +27,9 @@ function Address({ input, setInput }: AddressProps) {
             placeholder="Input your address"
             required
           />
+          {error?.address && (
+            <p className="text-red-500">* {error.address.errors[0]}</p>
+          )}
         </div>
       </div>
       <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
@@ -44,6 +49,9 @@ function Address({ input, setInput }: AddressProps) {
             placeholder="Input your district"
             required
           />
+          {error?.district && (
+            <p className="text-red-500">* {error.district.errors[0]}</p>
+          )}
         </div>
         <div className="form_field flex flex-col w-full gap-2">
           <label htmlFor="state">
@@ -61,6 +69,9 @@ function Address({ input, setInput }: AddressProps) {
               setInput((prev) => ({ ...prev, state: e.target.value }));
             }}
           />
+          {error?.state && (
+            <p className="text-red-500">* {error.state.errors[0]}</p>
+          )}
         </div>
         <div className="form_field flex flex-col w-full gap-2">
           <label htmlFor="country">
@@ -78,6 +89,9 @@ function Address({ input, setInput }: AddressProps) {
               setInput((prev) => ({ ...prev, country: e.target.value }));
             }}
           />
+          {error?.country && (
+            <p className="text-red-500">* {error.country.errors[0]}</p>
+          )}
         </div>
         <div className="form_field flex flex-col w-full gap-2">
           <label htmlFor="pincode">
@@ -95,6 +109,9 @@ function Address({ input, setInput }: AddressProps) {
               setInput((prev) => ({ ...prev, pincode: e.target.value }));
             }}
           />
+          {error?.pincode && (
+            <p className="text-red-500">* {error.pincode.errors[0]}</p>
+          )}
         </div>
       </div>
     </>
