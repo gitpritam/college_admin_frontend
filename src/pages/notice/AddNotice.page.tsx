@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import type { INotice } from "../../@types/interface/notice.interface";
 import { noticeValidationSchema } from "../../validations/notice.validation";
 import z from "zod";
-import api from "../../config/axios.config";
 
 function AddNoticePage() {
   const [formData, setFormData] = React.useState<INotice>({
@@ -36,38 +35,24 @@ function AddNoticePage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSuccess(null);
-    setError(undefined);
-    try {
-      const validateData = noticeValidationSchema
-        .omit({ notice_id: true, posted_by: true })
-        .safeParse(formData);
-      console.log("Validated data:", validateData);
-      if (!validateData.success) {
-        const errors = z.treeifyError(validateData.error).properties;
-        console.log(errors);
-        setError(errors);
-      }
-      const payload = {
-        title: validateData.data?.title,
-        description: validateData.data?.description,
-        year: validateData.data?.year,
-      };
-      const response = await api.post("/notice", payload);
-      console.log(response);
-      console.log(validateData.data);
-      setFormData({
-        title: "",
-        description: "",
-        year: 0,
-      });
-      setIsSuccess(true);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setIsSuccess(false);
-    }
-  };
+       e.preventDefault();
+       setError(undefined);
+       try {
+         const validateData = noticeValidationSchema
+           .omit({ notice_id: true, posted_by: true })
+           .safeParse(formData);
+         console.log("Validated data:", validateData);
+         if (!validateData.success) {
+           const errors = z.treeifyError(validateData.error).properties;
+           console.log(errors);
+           setError(errors);
+         }
+         console.log(validateData.data);
+       } catch (error) {
+         console.error("Error submitting form:", error);
+       }
+     };
+   
 
   return (
     <div className="flex w-full p-6 flex-col">

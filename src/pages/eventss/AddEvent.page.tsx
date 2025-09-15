@@ -13,18 +13,19 @@ function AddEventPage() {
     venue: "",
     });
 
-     const [error, setError] = useState<
-        | {
-            title: { errors: string[] };
-            description: { errors: string[] };
-            start_date: { errors: string[] };
-            end_date: { errors: string[] };
-            start_time: { errors: string[] };
-            end_time: { errors: string[] };
-            venue: { errors: string[] };
-          }
-        | undefined
-      >(undefined);
+    const [error, setError] = useState<
+  | {
+      title?: { errors: string[] };
+      description?: { errors: string[] };
+      start_date?: { errors: string[] };
+      end_date?: { errors: string[] };
+      start_time?: { errors: string[] };
+      end_time?: { errors: string[] };
+      venue?: { errors: string[] };
+    }
+  | undefined
+>(undefined);
+
  
 
    const handleChange = (
@@ -58,7 +59,6 @@ function AddEventPage() {
          console.log(errors);
          setError(errors);
        }
- 
        console.log(validateData.data);
      } catch (error) {
        console.error("Error submitting form:", error);

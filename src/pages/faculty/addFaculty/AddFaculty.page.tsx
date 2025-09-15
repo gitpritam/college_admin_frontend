@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Address from "../../../components/form/address/Address.component";
 import type { IFaculty } from "../../../@types/interface/faculty.interface";
-import api from "../../../config/axios.config";
 import z from "zod";
 import { facultyValidationSchema } from "../../../validations/faculty.validation";
 
@@ -34,6 +33,28 @@ function AddFacultyPage() {
       pincode: "",
     },
   });
+
+  const [error, setError] = useState<
+     | {
+         first_name?: { errors: string[] };
+         middle_name?: { errors: string[] };
+         last_name?: { errors: string[] };
+         dob?: { errors: string[] };
+         phone_number?: { errors: string[] };
+         email?: { errors: string[] };
+         qualification?: { errors: string[] };
+         designation?: { errors: string[] };
+         department?: { errors: string[] };
+         experience?: { errors: string[] };
+         password?: { errors: string[] };
+         joining_date?: { errors: string[] };
+         current_address?: { errors: string[] };
+         permanent_address?: { errors: string[] };
+       }
+     | undefined
+   >(undefined);
+   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+  
     
      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
          const { name, value } = e.target;
@@ -73,97 +94,32 @@ function AddFacultyPage() {
     }); 
   };
 
-  const [error, setError] = useState<
-     | {
-         first_name?: { errors: string[] };
-         middle_name?: { errors: string[] };
-         last_name?: { errors: string[] };
-         dob?: { errors: string[] };
-         phone_number?: { errors: string[] };
-         email?: { errors: string[] };
-         qualification?: { errors: string[] };
-         designation?: { errors: string[] };
-         department?: { errors: string[] };
-         experience?: { errors: string[] };
-         password?: { errors: string[] };
-         joining_date?: { errors: string[] };
-         current_address?: { errors: string[] };
-         permanent_address?: { errors: string[] };
-       }
-     | undefined
-   >(undefined);
-   const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
   
-   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSuccess(null);
-    setError(undefined);
-    try {
-      const validateData = facultyValidationSchema
-        .omit({ notice_id: true, posted_by: true })
-        .safeParse(formData);
-      console.log("Validated data:", validateData);
-      if (!validateData.success) {
-        const errors = z.treeifyError(validateData.error).properties;
-        console.log(errors);
-        setError(errors);
-      }
-      const payload = {
-        first_name: validateData.data?.first_name,
-        middle_name: validateData.data?.middle_name,
-        last_name: validateData.data?.last_name,
-        dob: validateData.data?.dob,
-        phone_number: validateData.data?.phone_number,
-        email: validateData.data?.email,
-        qualification: validateData.data?.qualification,
-        designation: validateData.data?.designation,
-        department: validateData.data?.department,
-        experience: validateData.data?.experience,
-        password: validateData.data?.password,
-        joining_date: validateData.data?.joining_date,
-      };
-      const response = await api.post("/faculty", payload);
-      console.log(response);
-      console.log(validateData.data);
-      setFormData({
-        first_name: "",
-        middle_name: "",
-        last_name: "",
-        dob: "",
-        phone_number: "",
-        email: "",
-        qualification: "",
-        designation: "",
-        department: "",
-        experience: "",
-        password: "",
-        joining_date: "",
-        current_address: {
-          address: "",
-          district: "",
-          state: "",
-          country: "",
-          pincode: "",
-        },
-        permanent_address: {
-          address: "",
-          district: "",
-          state: "",
-          country: "",
-          pincode: "",
-        },
-      });
-      setIsSuccess(true);
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setIsSuccess(false);
-    }
-  };
-
+  const handleSubmit = async (e: React.FormEvent) => {
+       e.preventDefault();
+       setError(undefined);
+       try {
+         const validateData = facultyValidationSchema
+           .omit({ faculty_id: true, posted_by: true })
+           .safeParse(formData);
+         console.log("Validated data:", validateData);
+         if (!validateData.success) {
+           const errors = z.treeifyError(validateData.error).properties;
+           console.log(errors);
+           setError(errors);
+         }
+         console.log(validateData.data);
+       } catch (error) {
+         console.error("Error submitting form:", error);
+       }
+     };
+   
+   
   return (
     <div className="flex w-full p-6 flex-col">
       <h1 className="main-heading font-bold text-xl mb-5">Add Faculty</h1>
       <form
+      noValidate
         onSubmit={handleSubmit}
         className="faculty_form flex flex-col w-full"
       >
@@ -431,7 +387,7 @@ function AddFacultyPage() {
           role="alert"
         >
           <div className="flex items-center justify-between">
-            <span>Faculty added successfully.</span>
+            <span>Faculty  added successfully.</span>
             <button
               type="button"
               onClick={() => setIsSuccess(null)}

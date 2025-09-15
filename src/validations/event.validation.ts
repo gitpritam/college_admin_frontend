@@ -16,13 +16,13 @@ export const eventValidationSchema = z.object({
    start_date: z
     .string().regex(
     /^\d{4}-\d{2}-\d{2}$/,
-    "start_date must be in YYYY-MM-DD format"
+    "start_date is madatory"
   ),
 
   end_date: z
     .string().regex(
     /^\d{4}-\d{2}-\d{2}$/,
-    "end date must be in YYYY-MM-DD format"
+    "end date is mandatory"
   ),
 
   start_time:z
@@ -30,7 +30,6 @@ export const eventValidationSchema = z.object({
 
   end_time:z
   .string().optional(),
-
 
   venue: z
     .string()

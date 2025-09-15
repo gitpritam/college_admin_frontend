@@ -5,25 +5,25 @@ export const facultyValidationSchema = z.object({
 
   first_name: z
     .string()
-    .min(2, "Title should be at least 2 characters")
-    .max(50, "Title should be at most 50 characters"),
+    .min(2, "First name should be at least 2 characters")
+    .max(50, "First name should be at most 50 characters"),
 
- middle_name: z
+  middle_name: z
     .string()
-    .min(2, "Description should be at least 2 characters")
-    .max(200, "Description should be at most 200 characters"),
+    .min(1, "Middle name should be at least 1 character")
+    .max(50, "Middle name should be at most 50 characters")
+    .optional(),
 
- last_name: z
+  last_name: z
     .string()
-    .min(2, "Description should be at least 2 characters")
-    .max(200, "Description should be at most 200 characters"),
+    .min(2, "Last name should be at least 2 characters")
+    .max(50, "Last name should be at most 50 characters"),
 
   dob: z
-     .string().regex(
-     /^\d{4}-\d{2}-\d{2}$/,
-     "start_date must be in YYYY-MM-DD format"
-   ),
- phone_number: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "DOB is madatory"),
+
+  phone_number: z
     .string()
     .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number format"),
 
@@ -33,27 +33,28 @@ export const facultyValidationSchema = z.object({
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Invalid email format"
     ),
- qualification: z
+
+  qualification: z
     .string()
-    .min(2, "Title should be at least 2 characters")
-    .max(50, "Title should be at most 50 characters"),
+    .min(2, "Qualification should be at least 2 characters")
+    .max(50, "Qualification should be at most 50 characters"),
 
   designation: z
     .string()
-    .min(2, "Title should be at least 2 characters")
-    .max(50, "Title should be at most 50 characters"),
+    .min(2, "Designation should be at least 2 characters")
+    .max(50, "Designation should be at most 50 characters"),
 
   department: z
     .string()
-    .min(2, "Title should be at least 2 characters")
-    .max(50, "Title should be at most 50 characters"),
+    .min(2, "Department should be at least 2 characters")
+    .max(50, "Department should be at most 50 characters"),
 
   experience: z
     .string()
-    .min(2, "Title should be at least 2 characters")
-    .max(50, "Title should be at most 50 characters"),
+    .min(1, "Experience should be at least 1 character")
+    .max(50, "Experience should be at most 50 characters"),
 
-   password: z
+  password: z
     .string()
     .regex(
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/,
@@ -61,14 +62,23 @@ export const facultyValidationSchema = z.object({
     )
     .optional(),
 
-  joining_date: z.string().regex(
-    /^\d{4}-\d{2}-\d{2}$/,
-    "Joining date must be in YYYY-MM-DD format"
-  ),
+  joining_date: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, "Joining date is mandatory"),
 
   posted_by: z
-      .string()
-      .min(2, "It should be at least 2 characters")
-      .max(20, "It should be at most 20 characters")
-      .optional(),
+    .string()
+    .min(2, "Posted by should be at least 2 characters")
+    .max(20, "Posted by should be at most 20 characters")
+    .optional(),
+
+    /*current_address: z
+    .string()
+    .min(2, "Current address should be at least 2 characters")
+    .max(100, "Current address should be at most 100 characters"),
+
+    permanent_address: z
+    .string()
+    .min(2, "Permanent address should be at least 2 characters")
+    .max(100, "Permanent address should be at most 100 characters"),*/
 });
