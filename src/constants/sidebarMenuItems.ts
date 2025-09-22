@@ -1,9 +1,12 @@
 import {
-  MdCelebration,
+  MdOutlineChat,
   MdOutlineDashboard,
+  MdOutlineEvent,
+  MdOutlineEventAvailable,
   MdOutlineFormatListBulleted,
-  MdOutlinePerson,
-  MdOutlinePersonAdd,
+  MdOutlineNoteAdd,
+  MdOutlinePerson2,
+  MdOutlinePersonAddAlt1,
 } from "react-icons/md";
 
 const sidebarMenuItems = [
@@ -15,12 +18,12 @@ const sidebarMenuItems = [
   },
   {
     title: "Faculty",
-    icon: MdOutlinePerson,
+    icon: MdOutlinePerson2,
     children: [
       {
         title: "Add Faculty",
         path: "/faculty/add",
-        icon: MdOutlinePersonAdd,
+        icon: MdOutlinePersonAddAlt1,
       },
       {
         title: "Faculty List",
@@ -31,12 +34,12 @@ const sidebarMenuItems = [
   },
   {
     title: "Students",
-    icon: MdOutlinePerson,
+    icon: MdOutlinePerson2,
     children: [
       {
         title: "Add Student",
         path: "/students/add",
-        icon: MdOutlinePersonAdd,
+        icon: MdOutlinePersonAddAlt1,
       },
       {
         title: "Student List",
@@ -47,16 +50,16 @@ const sidebarMenuItems = [
   },
   {
     title: "Notices",
-    icon: MdOutlinePerson,
+    icon: MdOutlineChat,
     children: [
       {
         title: "Add Notice",
         path: "/notices/add",
-        icon: MdOutlinePersonAdd,
+        icon: MdOutlineNoteAdd,
       },
 
       {
-        title: "Add Notice",
+        title: "Notice List",
         path: "/notices/list",
         icon: MdOutlineFormatListBulleted,
       },
@@ -64,16 +67,16 @@ const sidebarMenuItems = [
   },
   {
     title: "Events",
-    icon: MdCelebration,
+    icon: MdOutlineEvent,
     children: [
       {
         title: "Add Event",
         path: "/events/add",
-        icon: MdOutlinePersonAdd,
+        icon: MdOutlineEventAvailable,
       },
 
       {
-        title: "Add Event",
+        title: "Event List",
         path: "/events/list",
         icon: MdOutlineFormatListBulleted,
       },

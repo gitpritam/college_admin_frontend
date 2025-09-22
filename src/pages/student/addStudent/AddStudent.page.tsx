@@ -3,6 +3,7 @@ import type { IStudent } from "../../../@types/interface/student.interface";
 import Address from "../../../components/form/address/Address.component";
 import { z } from "zod";
 import { studentValidationSchema } from "../../../validations/student.validation";
+import { addressValidationSchema } from "../../../validations/address.validation";
 
 function AddStudentPage() {
   const [formData, setFormData] = useState<IStudent>({
@@ -55,8 +56,27 @@ function AddStudentPage() {
       }
     | undefined
   >(undefined);
-
-  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+    const [currentAddressError, setCurrentAddressError] = useState<
+      | {
+          address?: { errors: string[] };
+          district?: { errors: string[] };
+          state?: { errors: string[] };
+          pincode?: { errors: string[] };
+          country?: { errors: string[] };
+        }
+      | undefined
+    >(undefined);
+    const [permanentAddressError, setPermanentAddressError] = useState<
+      | {
+          address?: { errors: string[] };
+          district?: { errors: string[] };
+          state?: { errors: string[] };
+          pincode?: { errors: string[] };
+          country?: { errors: string[] };
+        }
+      | undefined
+    >(undefined);
+    const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -96,24 +116,47 @@ function AddStudentPage() {
     setError(undefined);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setError(undefined);
-        try {
-          const validateData = studentValidationSchema
-            .omit({ student_id: true, posted_by: true })
-            .safeParse(formData);
-          console.log("Validated data:", validateData);
-          if (!validateData.success) {
-            const errors = z.treeifyError(validateData.error).properties;
-            console.log(errors);
-            setError(errors);
-          }
-          console.log(validateData.data);
-        } catch (error) {
-          console.error("Error submitting form:", error);
-        }
-      };
+ const handleSubmit = async (e: React.FormEvent) => {
+     e.preventDefault();
+     setError(undefined);
+     setCurrentAddressError(undefined);
+     setPermanentAddressError(undefined);
+     console.log(formData);
+     try {
+       const validateData = studentValidationSchema
+         .omit({ faculty_id: true, posted_by: true })
+         .safeParse(formData);
+       const currentAddressValidateData = addressValidationSchema.safeParse(
+         formData.current_address
+       );
+       const permanentAddressValidateData = addressValidationSchema.safeParse(
+         formData.permanent_address
+       );
+ 
+       if (!currentAddressValidateData.success) {
+         const errors = z.treeifyError(
+           currentAddressValidateData.error
+         ).properties;
+         setCurrentAddressError(errors);
+       }
+       if (!permanentAddressValidateData.success) {
+         const errors = z.treeifyError(
+           permanentAddressValidateData.error
+         ).properties;
+         setPermanentAddressError(errors);
+       }
+       console.log("Validated data:", validateData);
+       if (!validateData.success) {
+         const errors = z.treeifyError(validateData.error).properties;
+         console.log(errors);
+         setError(errors);
+       }
+       console.log(validateData.data);
+     } catch (error) {
+       console.error("Error submitting form:", error);
+     }
+   };
+   console.log(error);
 
   return (
     <div className="flex w-full p-6 flex-col">
@@ -250,50 +293,117 @@ function AddStudentPage() {
             {error?.guardian_email && <p className="text-red-500">* {error.guardian_email.errors[0]}</p>}
           </div>
         </div>
-        <h1 className="text-lg font-bold mt-2">Current Address</h1>
-        <Address
-          input={formData.current_address}
-          setInput={(value) =>
-            setFormData((prev) => ({
-              ...prev,
-              current_address: typeof value === "function" ? value(prev.current_address) : value,
-            }))
-          }
-        />
-        {error?.current_address && <p className="text-red-500">* {error.current_address.errors[0]}</p>}
+         <div>
+          <h1 className="text-lg font-bold mt-2">Current Address</h1>
+          <Address
+            error={currentAddressError}
+            input={formData.current_address}
+            setInput={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                current_address:
+                  typeof value === "function"
+                    ? value(prev.current_address)
+                    : value,
+              }))
+            }
+          />
+          <h1 className="text-lg font-bold mt-2">Permanent Address</h1>
+          <Address
+            error={permanentAddressError}
+            input={formData.permanent_address}
+            setInput={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                permanent_address:
+                  typeof value === "function"
+                    ? value(prev.permanent_address)
+                    : value,
+              }))
+            }
+          />
+        </div>
 
-        <h1 className="text-lg font-bold mt-2">Permanent Address</h1>
-        <Address
-          input={formData.permanent_address}
-          setInput={(value) =>
-            setFormData((prev) => ({
-              ...prev,
-              permanent_address: typeof value === "function" ? value(prev.permanent_address) : value,
-            }))
-          }
-        />
-        {error?.permanent_address && <p className="text-red-500">* {error.permanent_address.errors[0]}</p>}
-
-        {/* Submit / Reset Buttons */}
         <div className="button_group flex gap-3 my-5">
-          <button type="submit" className="rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-700">
+          <button
+            type="submit"
+            className="rounded-md bg-green-600 px-4 py-2 cursor-pointer text-white hover:bg-green-700"
+          >
             Submit
           </button>
-          <button type="button" onClick={handleReset} className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="rounded-md bg-red-600 px-4 py-2 cursor-pointer text-white hover:bg-red-700"
+          >
             Reset
           </button>
         </div>
       </form>
-
-      {/* Success / Error Alerts */}
       {isSuccess && (
-        <div className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50" role="alert">
-          <span>Student added successfully.</span>
+        <div
+          className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 relative"
+          role="alert"
+        >
+          <div className="flex items-center justify-between">
+            <span>Student added successfully.</span>
+            <button
+              type="button"
+              onClick={() => setIsSuccess(null)}
+              className="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
+              aria-label="Close"
+            >
+              <span className="sr-only">Close</span>
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       )}
       {!isSuccess && isSuccess !== null && (
-        <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
-          <span>Failed to add student.</span>
+        <div
+          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 relative"
+          role="alert"
+        >
+          <div className="flex items-center justify-between">
+            <span>Failed to add student.</span>
+            <button
+              type="button"
+              onClick={() => setIsSuccess(null)}
+              className="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
+              aria-label="Close"
+            >
+              <span className="sr-only">Close</span>
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       )}
     </div>

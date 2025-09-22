@@ -44,7 +44,6 @@ const Router = createBrowserRouter([
       {
         path: "notices",
         children: [
-          //new jinis sekha66i..  /notice e request korle amra mootice list e redirect kore debo
           {
             index: true,
             element: <Navigate to="list" replace />,

@@ -31,9 +31,7 @@ export const studentValidationSchema = z.object({
     .max(20, "Roll number should be at most 20 characters")
     .optional(),
 
-  dob: z
-    .string()
-    .regex(/^\d{4}-\d{2}-\d{2}$/, "DOB is madatory"),
+ dob: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "DOB is madatory"),
 
   phone_number: z
     .string()
@@ -61,16 +59,6 @@ export const studentValidationSchema = z.object({
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
       "Invalid email format"
     ).optional(),
-
-  /*  current_address: z
-    .string()
-    .min(2, "Current address should be at least 2 characters")
-    .max(100, "Current address should be at most 100 characters"),
-
-    permanent_address: z
-    .string()
-    .min(2, "Permanent address should be at least 2 characters")
-    .max(100, "Permanent address should be at most 100 characters"),*/
  
   department: z
     .string()
@@ -83,7 +71,6 @@ export const studentValidationSchema = z.object({
     .max(20, "Posted by should be at most 20 characters")
     .optional(),
 
-   year_of_admission: z.coerce.number({ message: "year of admission must be a valid" }),
-
-    year_of_passing: z.coerce.number({ message: "Year of passing must be a valid" }).optional(),
+   year_of_admission: z.coerce.number({ message: "Year of admission must be a valid" }),
+   year_of_passing: z.coerce.number({ message: "Year of passing must be a valid" }).optional(),
 });
