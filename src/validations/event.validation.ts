@@ -16,13 +16,13 @@ export const eventValidationSchema = z.object({
    start_date: z
     .string().regex(
     /^\d{4}-\d{2}-\d{2}$/,
-    "start_date is madatory"
+    "Start_date is madatory"
   ),
 
   end_date: z
     .string().regex(
     /^\d{4}-\d{2}-\d{2}$/,
-    "end date is mandatory"
+    "End date is mandatory"
   ),
 
   start_time:z
@@ -36,12 +36,18 @@ export const eventValidationSchema = z.object({
 
   venue: z
     .string()
-    .min(2, "venue should be at least 2 characters")
-    .max(200, "venue should be at most 200 characters"),
+    .min(2, "Venue should be at least 2 characters")
+    .max(200, "Venue should be at most 200 characters"),
 
   posted_by: z
     .string()
     .min(2, "It should be at least 2 characters")
     .max(20, "It should be at most 20 characters")
     .optional(),
+}).refine((data)=>{
+  console.log(new Date(data.end_date), new Date(data.start_date));
+  return new Date(data.end_date) >= new Date(data.start_date);
+},{
+      message: "End date must be same or greater than start date",
+      path: ["end_date"], // attach error to end_date field
 });

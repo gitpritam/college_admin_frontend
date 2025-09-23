@@ -157,6 +157,7 @@ function AddFacultyPage() {
   };
 
   console.log(error);
+  
   return (
     <div className="flex w-full p-6 flex-col">
       <h1 className="main-heading font-bold text-xl mb-5">Add Faculty</h1>

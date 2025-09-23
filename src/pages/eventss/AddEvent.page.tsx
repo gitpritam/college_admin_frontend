@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import type { IEvent } from "../../@types/interface/event.interface";
 import { eventValidationSchema } from "../../validations/event.validation";
 import z from "zod";
+import { toast } from "react-toastify";
+import api from "../../config/axios.config";
+import { AxiosError } from "axios";
+import { FaSpinner } from "react-icons/fa";
 
 function AddEventPage() {
   const [formData, setFormData] = React.useState<IEvent>({
@@ -26,7 +30,7 @@ function AddEventPage() {
       }
     | undefined
   >(undefined);
-  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<boolean >(false);
   
 
   const handleChange = (
@@ -48,24 +52,41 @@ function AddEventPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-         e.preventDefault();
-         setError(undefined);
-         try {
-           const validateData = eventValidationSchema
-             .omit({ event_id: true, posted_by: true })
-             .safeParse(formData);
-           console.log("Validated data:", validateData);
-           if (!validateData.success) {
-             const errors = z.treeifyError(validateData.error).properties;
-             console.log(errors);
-             setError(errors);
-           }
-           console.log(validateData.data);
-         } catch (error) {
-           console.error("Error submitting form:", error);
+   const handleSubmit = async (e: React.FormEvent) => {
+       e.preventDefault();
+       setError(undefined);
+       setLoading(true);
+       try {
+         const validateData = eventValidationSchema
+           .omit({ event_id: true, posted_by: true })
+           .safeParse(formData);
+         console.log("Validated data:", validateData);
+         if (!validateData.success) {
+           const errors = z.treeifyError(validateData.error).properties;
+           console.log(errors);
+           setError(errors);
+           return;
          }
-       };
+
+         console.log(validateData.data);
+         const response = await api.post('/event', validateData.data);
+         if(response.status === 201){
+          handleReset();
+          toast('Event added successfully', { type: 'success' });
+         }
+         console.log(response);
+       } catch (error) {
+         console.error("Error submitting form:", error);
+         if(error instanceof AxiosError){
+          toast(error.response?.data?.message || 'Failed to add event', { type: 'error' });
+         }else{
+          toast('Something went wrong', { type: 'error' });
+         }
+       }finally{
+        setLoading(false);
+       }
+     };
+   
      
 
   return (
@@ -81,7 +102,7 @@ function AddEventPage() {
           <div className="form_field flex-row w-full gap-2 grid md:grid-cols-1 lg:grid-cols-3">
             <div className="form_field flex flex-col gap-2 grow">
               <label htmlFor="title">
-                title<span className="text-red-500 font-bold">*</span>
+                Title<span className="text-red-500 font-bold">*</span>
               </label>
               <input
                 type="text"
@@ -100,7 +121,7 @@ function AddEventPage() {
 
             <div className="form_field flex flex-col w-full gap-2">
               <label htmlFor="start_date">
-                start_date<span className="text-red-500 font-bold">*</span>
+                Start_date<span className="text-red-500 font-bold">*</span>
               </label>
               <input
                 type="date"
@@ -118,7 +139,7 @@ function AddEventPage() {
             </div>
             <div className="form_field flex flex-col w-full gap-2">
               <label htmlFor="end_date">
-                end_date<span className="text-red-500 font-bold">*</span>
+                End_date<span className="text-red-500 font-bold">*</span>
               </label>
               <input
                 type="date"
@@ -129,6 +150,7 @@ function AddEventPage() {
                 required
                 value={formData.end_date}
                 onChange={handleChange}
+                // min={formData.start_date}
               />
               {error?.end_date && (
                 <p className="text-red-500">* {error.end_date.errors[0]}</p>
@@ -138,7 +160,7 @@ function AddEventPage() {
 
           <div className="form_field flex flex-col w-full gap-2">
             <label htmlFor="description">
-              description<span className="text-red-500 font-bold">*</span>
+              Description<span className="text-red-500 font-bold">*</span>
             </label>
             <textarea
               id="description"
@@ -159,7 +181,7 @@ function AddEventPage() {
             <div className="form_field flex-row w-full gap-2 grid md:grid-cols-1 lg:grid-cols-3">
               <div className="form_field flex flex-col gap-2  grow">
                 <label htmlFor="start_time">
-                  start_time<span className="text-red-500 font-bold">*</span>
+                  Start_time<span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
                   type="time"
@@ -176,7 +198,7 @@ function AddEventPage() {
                 )}
               </div>
               <div className="form_field flex flex-col w-full gap-2">
-                <label htmlFor="end_time">end_time</label>
+                <label htmlFor="end_time">End_time</label>
                 <input
                   type="time"
                   id="end_time"
@@ -192,14 +214,14 @@ function AddEventPage() {
               </div>
               <div className="form_field flex flex-col w-full gap-2">
                 <label htmlFor="venue">
-                  venue<span className="text-red-500 font-bold">*</span>
+                  Venue<span className="text-red-500 font-bold">*</span>
                 </label>
                 <input
                   type="text"
                   id="venue"
                   name="venue"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 "
-                  placeholder="Input notice venue"
+                  placeholder="Input event venue"
                   required
                   value={formData.venue}
                   onChange={handleChange}
@@ -211,89 +233,30 @@ function AddEventPage() {
             </div>
           </div>
         </div>
-         <div className="button_group flex gap-3 my-5">
-          <button
-            type="submit"
-            className="rounded-md bg-green-600 px-4 py-2 cursor-pointer text-white hover:bg-green-700"
-          >
-            Submit
-          </button>
-          <button
-            type="button"
-            onClick={handleReset}
-            className="rounded-md bg-red-600 px-4 py-2 cursor-pointer text-white hover:bg-red-700"
-          >
-            Reset
-          </button>
-        </div>
-      </form>
-      {isSuccess && (
-        <div
-          className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 relative"
-          role="alert"
-        >
-          <div className="flex items-center justify-between">
-            <span>Notice added successfully.</span>
-            <button
-              type="button"
-              onClick={() => setIsSuccess(null)}
-              className="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
-              aria-label="Close"
-            >
-              <span className="sr-only">Close</span>
-              <svg
-                className="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
-      {!isSuccess && isSuccess !== null && (
-        <div
-          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 relative"
-          role="alert"
-        >
-          <div className="flex items-center justify-between">
-            <span>Failed to add notice.</span>
-            <button
-              type="button"
-              onClick={() => setIsSuccess(null)}
-              className="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
-              aria-label="Close"
-            >
-              <span className="sr-only">Close</span>
-              <svg
-                className="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+           <div className="button_group flex gap-3 my-5">
+                   <button
+                     type="submit"
+                     className="rounded-md bg-green-600 px-4 py-2 cursor-pointer text-white hover:bg-green-700"
+                     disabled={loading}
+                   >
+                     {loading ? 
+               <FaSpinner className="animate-spin text-white" size={16} />
+              : 'Submit'}
+         
+                   </button>
+                   <button
+                     type="button"
+                     onClick={handleReset}
+                     disabled={loading}
+                     className="rounded-md bg-red-600 px-4 py-2 cursor-pointer text-white hover:bg-red-700"
+                   >
+                     Reset
+                   </button>
+                 </div>
+               </form>
+             </div>
   );
 }
+
+
 export default AddEventPage;

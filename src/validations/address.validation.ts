@@ -3,12 +3,12 @@ import { z } from "zod";
 export const addressValidationSchema = z.object({
   address: z
     .string()
-    .min(2, "address should be at least 2 characters")
-    .max(100, "address should be at most 100 characters"),
+    .min(2, "Address should be at least 2 characters")
+    .max(100, "Address should be at most 100 characters"),
   district: z
     .string()
-    .min(2, "district should be at least 2 characters")
-    .max(50, "district should be at most 50 characters"),
+    .min(2, "District should be at least 2 characters")
+    .max(50, "District should be at most 50 characters"),
   state: z.string()
   .min(2, "State should be at least 2 characters")
   .max(50, "State should be at most 50 characters"),
