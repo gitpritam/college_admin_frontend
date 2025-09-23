@@ -26,10 +26,13 @@ export const eventValidationSchema = z.object({
   ),
 
   start_time:z
-  .string(),
+  .string()
+  .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)"),
 
   end_time:z
-  .string().optional(),
+  .string()
+  .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Invalid time format (HH:MM)")
+  .optional(),
 
   venue: z
     .string()

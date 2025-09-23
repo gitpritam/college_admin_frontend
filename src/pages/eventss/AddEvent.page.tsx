@@ -78,7 +78,7 @@ function AddEventPage() {
       >
         <h1 className="text-lg font-bold mt-2">Basic Details</h1>
         <div className="form_group flex gap-3 my-1 flex-col">
-          <div className="form_field flex-row w-full gap-2 grid grid-cols-3">
+          <div className="form_field flex-row w-full gap-2 grid md:grid-cols-1 lg:grid-cols-3">
             <div className="form_field flex flex-col gap-2 grow">
               <label htmlFor="title">
                 title<span className="text-red-500 font-bold">*</span>
@@ -156,7 +156,7 @@ function AddEventPage() {
           </div>
 
           <div className="form_field flex flex-col w-full gap-2">
-            <div className="form_field flex-row w-full gap-2 grid grid-cols-3">
+            <div className="form_field flex-row w-full gap-2 grid md:grid-cols-1 lg:grid-cols-3">
               <div className="form_field flex flex-col gap-2  grow">
                 <label htmlFor="start_time">
                   start_time<span className="text-red-500 font-bold">*</span>
