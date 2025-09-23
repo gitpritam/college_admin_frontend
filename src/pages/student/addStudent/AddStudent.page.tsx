@@ -124,7 +124,7 @@ function AddStudentPage() {
      console.log(formData);
      try {
        const validateData = studentValidationSchema
-         .omit({ faculty_id: true, posted_by: true })
+         .omit({ student_id: true, posted_by: true })
          .safeParse(formData);
        const currentAddressValidateData = addressValidationSchema.safeParse(
          formData.current_address
