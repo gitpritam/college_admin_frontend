@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Address from "../../../components/form/address/Address.component";
 import type { IFaculty } from "../../../@types/interface/faculty.interface";
 import z from "zod";
-import { facultyValidationSchema } from "../../../validations/faculty.validation";
+import { facultyValidationSchema, profilePhotoValidationSchema } from "../../../validations/faculty.validation";
 import { addressValidationSchema } from "../../../validations/address.validation";
+import api from "../../../config/axios.config";
+import { IoMdClose } from "react-icons/io";
 
 function AddFacultyPage() {
   const [formData, setFormData] = React.useState<IFaculty>({
@@ -19,6 +21,7 @@ function AddFacultyPage() {
     experience: "",
     password: "",
     joining_date: "",
+    role:'staff',
     current_address: {
       address: "",
       district: "",
@@ -34,7 +37,7 @@ function AddFacultyPage() {
       pincode: "",
     },
   });
-
+  const profilePhotoInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<
     | {
         first_name?: { errors: string[] };
@@ -49,6 +52,7 @@ function AddFacultyPage() {
         experience?: { errors: string[] };
         password?: { errors: string[] };
         joining_date?: { errors: string[] };
+        role?: { errors: string[] };
       }
     | undefined
   >(undefined);
@@ -72,9 +76,21 @@ function AddFacultyPage() {
       }
     | undefined
   >(undefined);
-  const [isSuccess, setIsSuccess] = useState<boolean | null>(null);
+  const [profilePhotoError, setProfilePhotoError] = useState<
+    | {
+        profile_photo?: { errors: string[] };
+      }
+    | undefined
+  >(undefined);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const [profilePhoto, setProfilePhoto] = useState<File | undefined>(undefined);
+
+      const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files ? e.target.files[0] : null;
+        if (file) setProfilePhoto(file);
+        console.log(e);
+      };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     console.log(name, value);
@@ -94,6 +110,7 @@ function AddFacultyPage() {
       experience: "",
       password: "",
       joining_date: "",
+      role:'staff',
       current_address: {
         address: "",
         district: "",
@@ -109,10 +126,10 @@ function AddFacultyPage() {
         pincode: "",
       },
     });
+    handleFileInputReset();
     setError(undefined);
     setCurrentAddressError(undefined);
     setPermanentAddressError(undefined);
-    setIsSuccess(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -131,31 +148,84 @@ function AddFacultyPage() {
       const permanentAddressValidateData = addressValidationSchema.safeParse(
         formData.permanent_address
       );
+      if (profilePhoto) {
+      const profilePhotoValidateData = profilePhotoValidationSchema.safeParse(
+        { profile_photo: profilePhoto }
+      );
+
+      if (!profilePhotoValidateData.success) {
+        const errors = z.treeifyError(
+          profilePhotoValidateData.error
+        ).properties;
+        setProfilePhotoError(errors);
+        return;
+      }
+    }
 
       if (!currentAddressValidateData.success) {
         const errors = z.treeifyError(
           currentAddressValidateData.error
         ).properties;
         setCurrentAddressError(errors);
+        return;
       }
       if (!permanentAddressValidateData.success) {
         const errors = z.treeifyError(
           permanentAddressValidateData.error
         ).properties;
         setPermanentAddressError(errors);
+        return;
       }
       console.log("Validated data:", validateData);
       if (!validateData.success) {
         const errors = z.treeifyError(validateData.error).properties;
         console.log(errors);
         setError(errors);
+        return;
+      }
+
+      const sendFormData = new FormData();
+      sendFormData.append("first_name", validateData.data.first_name);
+      if (validateData.data.middle_name)
+        sendFormData.append("middle_name", validateData.data.middle_name);
+      sendFormData.append("last_name", validateData.data.last_name);
+      sendFormData.append("dob", validateData.data.dob);
+      sendFormData.append("phone_number", validateData.data.phone_number);
+      sendFormData.append("email", validateData.data.email);
+      sendFormData.append("qualification", validateData.data.qualification);
+      sendFormData.append("designation", validateData.data.designation);
+      sendFormData.append("department", validateData.data.department);
+      sendFormData.append("experience", validateData.data.experience);
+      if (validateData.data.password)sendFormData.append("password", validateData.data.password);
+      sendFormData.append("joining_date", validateData.data.joining_date);
+      Object.entries(currentAddressValidateData.data).forEach(([key,value]) => {
+  sendFormData.append(`current_address[${key}]`, value);
+});
+
+Object.entries(permanentAddressValidateData.data).forEach(([key, value]) => {
+  sendFormData.append(`permanent_address[${key}]`, value);
+});
+     if( validateData.data.role) sendFormData.append("role", validateData.data.role);
+
+      if (profilePhoto) sendFormData.append("profile_picture", profilePhoto);
+
+      const response = await api.post('/faculty', sendFormData, {headers: {'Content-Type': 'multipart/form-data'}});
+      if(response.status === 201){
+        console.log(response.data.result);
+        alert("Faculty added successfully");
+        handleReset();
       }
       console.log(validateData.data);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
-
+  const handleFileInputReset = () => {
+    setProfilePhoto(undefined);
+    if (profilePhotoInputRef.current) {
+      profilePhotoInputRef.current.value = ""; // clear input field
+    }
+  };
   console.log(error);
   
   return (
@@ -379,6 +449,55 @@ function AddFacultyPage() {
               <p className="text-red-500">* {error.joining_date.errors[0]}</p>
             )}
           </div>
+          <div className="form_field flex flex-col w-full gap-2">
+            <label htmlFor="profile_photo">
+              Profile Photo
+            </label>
+            <div className="relative">
+            <input
+              type="file"
+              accept=".jpg, .jpeg"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              name="profile_photo"
+              id="profile_photo"
+              onChange={handleFileChange}
+              ref={profilePhotoInputRef}
+              />
+              {profilePhoto && (
+              <button
+                  type="button"
+                  onClick={handleFileInputReset}
+                  className="text-red-500 hover:text-red-700 absolute right-1 top-2 rounded-full p-1 cursor-pointer transition"
+                  aria-label="Remove selected photo"
+                >
+                  <IoMdClose size={18} />
+                </button>
+            )}
+              </div>
+            {profilePhotoError?.profile_photo && (
+              <p className="text-red-500">* {profilePhotoError.profile_photo.errors[0]}</p>
+            )}
+            
+          </div>
+          <div className="form_field flex flex-col w-full gap-2">
+            <label htmlFor="role">
+              Role
+            </label>
+            <select
+              id="role"
+              name="role"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+              onChange={handleChange}
+              value={formData.role}
+            >
+              <option value="admin">Admin</option>
+              <option value="faculty">Faculty</option>
+              <option value="staff">Staff</option>
+            </select>
+            {profilePhotoError?.profile_photo && (
+              <p className="text-red-500">* {profilePhotoError.profile_photo.errors[0]}</p>
+            )}
+          </div>
         </div>
         <div>
           <h1 className="text-lg font-bold mt-2">Current Address</h1>
@@ -426,72 +545,8 @@ function AddFacultyPage() {
           </button>
         </div>
       </form>
-      {isSuccess && (
-        <div
-          className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 relative"
-          role="alert"
-        >
-          <div className="flex items-center justify-between">
-            <span>Faculty added successfully.</span>
-            <button
-              type="button"
-              onClick={() => setIsSuccess(null)}
-              className="ml-auto -mx-1.5 -my-1.5 bg-green-50 text-green-500 rounded-lg focus:ring-2 focus:ring-green-400 p-1.5 hover:bg-green-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"
-              aria-label="Close"
-            >
-              <span className="sr-only">Close</span>
-              <svg
-                className="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
-      {!isSuccess && isSuccess !== null && (
-        <div
-          className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 relative"
-          role="alert"
-        >
-          <div className="flex items-center justify-between">
-            <span>Failed to add faculty.</span>
-            <button
-              type="button"
-              onClick={() => setIsSuccess(null)}
-              className="ml-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700"
-              aria-label="Close"
-            >
-              <span className="sr-only">Close</span>
-              <svg
-                className="w-3 h-3"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 14 14"
-              >
-                <path
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      )}
+      
+     
     </div>
   );
 }

@@ -10,7 +10,6 @@ export const facultyValidationSchema = z.object({
 
   middle_name: z
     .string()
-    .min(1, "Middle name should be at least 1 character")
     .max(50, "Middle name should be at most 50 characters")
     .optional(),
 
@@ -69,4 +68,20 @@ export const facultyValidationSchema = z.object({
     .min(2, "Posted by should be at least 2 characters")
     .max(20, "Posted by should be at most 20 characters")
     .optional(),
+    role:z.enum(['admin','staff','faculty', "guest"]).optional(),
+});
+
+export const profilePhotoValidationSchema = z.object({
+  profile_photo: z
+    .any().optional()
+    .refine((file) => file instanceof File, "Profile photo is required")
+    .refine(
+      (file) => file && file.size <= 0.5 * 1024 * 1024, // 500kB limit
+      "Profile photo must be less than 500KB"
+    )
+    .refine(
+      (file) =>
+        file && ["image/jpeg", "image/jpg"].includes(file.type),
+      "Profile photo must be a JPEG, JPG image"
+    ),
 });
