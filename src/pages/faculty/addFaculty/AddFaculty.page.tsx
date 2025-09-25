@@ -2,10 +2,16 @@ import React, { useRef, useState } from "react";
 import Address from "../../../components/form/address/Address.component";
 import type { IFaculty } from "../../../@types/interface/faculty.interface";
 import z from "zod";
-import { facultyValidationSchema, profilePhotoValidationSchema } from "../../../validations/faculty.validation";
+import {
+  facultyValidationSchema,
+  profilePhotoValidationSchema,
+} from "../../../validations/faculty.validation";
 import { addressValidationSchema } from "../../../validations/address.validation";
 import api from "../../../config/axios.config";
 import { IoMdClose } from "react-icons/io";
+import { FaSpinner } from "react-icons/fa";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
 
 function AddFacultyPage() {
   const [formData, setFormData] = React.useState<IFaculty>({
@@ -21,7 +27,7 @@ function AddFacultyPage() {
     experience: "",
     password: "",
     joining_date: "",
-    role:'staff',
+    role: "staff",
     current_address: {
       address: "",
       district: "",
@@ -56,6 +62,8 @@ function AddFacultyPage() {
       }
     | undefined
   >(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [currentAddressError, setCurrentAddressError] = useState<
     | {
         address?: { errors: string[] };
@@ -83,14 +91,17 @@ function AddFacultyPage() {
     | undefined
   >(undefined);
 
-      const [profilePhoto, setProfilePhoto] = useState<File | undefined>(undefined);
+  const [profilePhoto, setProfilePhoto] = useState<File | undefined>(undefined);
 
-      const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files ? e.target.files[0] : null;
-        if (file) setProfilePhoto(file);
-        console.log(e);
-      };
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement|HTMLSelectElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    if (file) setProfilePhoto(file);
+    console.log(e);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     console.log(name, value);
@@ -110,7 +121,7 @@ function AddFacultyPage() {
       experience: "",
       password: "",
       joining_date: "",
-      role:'staff',
+      role: "staff",
       current_address: {
         address: "",
         district: "",
@@ -149,18 +160,18 @@ function AddFacultyPage() {
         formData.permanent_address
       );
       if (profilePhoto) {
-      const profilePhotoValidateData = profilePhotoValidationSchema.safeParse(
-        { profile_photo: profilePhoto }
-      );
+        const profilePhotoValidateData = profilePhotoValidationSchema.safeParse(
+          { profile_photo: profilePhoto }
+        );
 
-      if (!profilePhotoValidateData.success) {
-        const errors = z.treeifyError(
-          profilePhotoValidateData.error
-        ).properties;
-        setProfilePhotoError(errors);
-        return;
+        if (!profilePhotoValidateData.success) {
+          const errors = z.treeifyError(
+            profilePhotoValidateData.error
+          ).properties;
+          setProfilePhotoError(errors);
+          return;
+        }
       }
-    }
 
       if (!currentAddressValidateData.success) {
         const errors = z.treeifyError(
@@ -196,28 +207,46 @@ function AddFacultyPage() {
       sendFormData.append("designation", validateData.data.designation);
       sendFormData.append("department", validateData.data.department);
       sendFormData.append("experience", validateData.data.experience);
-      if (validateData.data.password)sendFormData.append("password", validateData.data.password);
+      if (validateData.data.password)
+        sendFormData.append("password", validateData.data.password);
       sendFormData.append("joining_date", validateData.data.joining_date);
-      Object.entries(currentAddressValidateData.data).forEach(([key,value]) => {
-  sendFormData.append(`current_address[${key}]`, value);
-});
+      Object.entries(currentAddressValidateData.data).forEach(
+        ([key, value]) => {
+          sendFormData.append(`current_address[${key}]`, value);
+        }
+      );
 
-Object.entries(permanentAddressValidateData.data).forEach(([key, value]) => {
-  sendFormData.append(`permanent_address[${key}]`, value);
-});
-     if( validateData.data.role) sendFormData.append("role", validateData.data.role);
+      Object.entries(permanentAddressValidateData.data).forEach(
+        ([key, value]) => {
+          sendFormData.append(`permanent_address[${key}]`, value);
+        }
+      );
+      for (const [key, value] of sendFormData.entries()) {
+  console.log(`${key}: ${value}`);
+}
+      if (validateData.data.role)
+        sendFormData.append("role", validateData.data.role);
 
       if (profilePhoto) sendFormData.append("profile_picture", profilePhoto);
 
-      const response = await api.post('/faculty', sendFormData, {headers: {'Content-Type': 'multipart/form-data'}});
-      if(response.status === 201){
-        console.log(response.data.result);
-        alert("Faculty added successfully");
+      console.log(validateData.data);
+      const response = await api.post("/faculty", sendFormData, {headers:{"Content-Type":"multipart/form-data" }});
+      if (response.status === 201) {
         handleReset();
+        toast("Faculty added successfully", { type: "success" });
       }
       console.log(validateData.data);
     } catch (error) {
       console.error("Error submitting form:", error);
+      if (error instanceof AxiosError) {
+        toast(error.response?.data?.message || "Failed to add faculty", {
+          type: "error",
+        });
+      } else {
+        toast("Something went wrong", { type: "error" });
+      }
+    } finally {
+      setLoading(false);
     }
   };
   const handleFileInputReset = () => {
@@ -226,8 +255,7 @@ Object.entries(permanentAddressValidateData.data).forEach(([key, value]) => {
       profilePhotoInputRef.current.value = ""; // clear input field
     }
   };
-  console.log(error);
-  
+
   return (
     <div className="flex w-full p-6 flex-col">
       <h1 className="main-heading font-bold text-xl mb-5">Add Faculty</h1>
@@ -450,21 +478,19 @@ Object.entries(permanentAddressValidateData.data).forEach(([key, value]) => {
             )}
           </div>
           <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="profile_photo">
-              Profile Photo
-            </label>
+            <label htmlFor="profile_photo">Profile Photo</label>
             <div className="relative">
-            <input
-              type="file"
-              accept=".jpg, .jpeg"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-              name="profile_photo"
-              id="profile_photo"
-              onChange={handleFileChange}
-              ref={profilePhotoInputRef}
+              <input
+                type="file"
+                accept=".jpg, .jpeg"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                name="profile_photo"
+                id="profile_photo"
+                onChange={handleFileChange}
+                ref={profilePhotoInputRef}
               />
               {profilePhoto && (
-              <button
+                <button
                   type="button"
                   onClick={handleFileInputReset}
                   className="text-red-500 hover:text-red-700 absolute right-1 top-2 rounded-full p-1 cursor-pointer transition"
@@ -472,17 +498,16 @@ Object.entries(permanentAddressValidateData.data).forEach(([key, value]) => {
                 >
                   <IoMdClose size={18} />
                 </button>
-            )}
-              </div>
+              )}
+            </div>
             {profilePhotoError?.profile_photo && (
-              <p className="text-red-500">* {profilePhotoError.profile_photo.errors[0]}</p>
+              <p className="text-red-500">
+                * {profilePhotoError.profile_photo.errors[0]}
+              </p>
             )}
-            
           </div>
           <div className="form_field flex flex-col w-full gap-2">
-            <label htmlFor="role">
-              Role
-            </label>
+            <label htmlFor="role">Role</label>
             <select
               id="role"
               name="role"
@@ -495,7 +520,9 @@ Object.entries(permanentAddressValidateData.data).forEach(([key, value]) => {
               <option value="staff">Staff</option>
             </select>
             {profilePhotoError?.profile_photo && (
-              <p className="text-red-500">* {profilePhotoError.profile_photo.errors[0]}</p>
+              <p className="text-red-500">
+                * {profilePhotoError.profile_photo.errors[0]}
+              </p>
             )}
           </div>
         </div>
@@ -533,20 +560,24 @@ Object.entries(permanentAddressValidateData.data).forEach(([key, value]) => {
           <button
             type="submit"
             className="rounded-md bg-green-600 px-4 py-2 cursor-pointer text-white hover:bg-green-700"
+            disabled={loading}
           >
-            Submit
+            {loading ? (
+              <FaSpinner className="animate-spin text-white" size={16} />
+            ) : (
+              "Submit"
+            )}
           </button>
           <button
             type="button"
             onClick={handleReset}
+            disabled={loading}
             className="rounded-md bg-red-600 px-4 py-2 cursor-pointer text-white hover:bg-red-700"
           >
             Reset
           </button>
         </div>
       </form>
-      
-     
     </div>
   );
 }
