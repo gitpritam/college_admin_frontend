@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import type { INotice } from "../../@types/interface/notice.interface";
 import { noticeValidationSchema } from "../../validations/notice.validation";
 import z from "zod";
@@ -24,7 +24,7 @@ function AddNoticePage() {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -39,50 +39,52 @@ function AddNoticePage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-       e.preventDefault();
-       setError(undefined);
-       setLoading(true);
-       try {
-         const validateData = noticeValidationSchema
-           .omit({ notice_id: true, posted_by: true })
-           .safeParse(formData);
-         console.log("Validated data:", validateData);
-         if (!validateData.success) {
-           const errors = z.treeifyError(validateData.error).properties;
-           console.log(errors);
-           setError(errors);
-         }
+    e.preventDefault();
+    setError(undefined);
+    setLoading(true);
+    try {
+      const validateData = noticeValidationSchema
+        .omit({ notice_id: true, posted_by: true })
+        .safeParse(formData);
+      console.log("Validated data:", validateData);
+      if (!validateData.success) {
+        const errors = z.treeifyError(validateData.error).properties;
+        console.log(errors);
+        setError(errors);
+      }
 
-         console.log(validateData.data);
-         const response = await api.post('/notice', validateData.data);
-         if(response.status === 201){
-          handleReset();
-          toast('Notice added successfully', { type: 'success' });
-         }
-         console.log(response);
-       } catch (error) {
-         console.error("Error submitting form:", error);
-         if(error instanceof AxiosError){
-          toast(error.response?.data?.message || 'Failed to add notice', { type: 'error' });
-         }else{
-          toast('Something went wrong', { type: 'error' });
-         }
-       }finally{
-        setLoading(false);
-       }
-     };
-   
-    //  useEffect(()=>{
-    //   const postData = async()=>{
-    //     try {
-          
-    //     } catch (error) {
-          
-    //     }
-    //   }
+      console.log(validateData.data);
+      const response = await api.post("/notice", validateData.data);
+      if (response.status === 201) {
+        handleReset();
+        toast("Notice added successfully", { type: "success" });
+      }
+      console.log(response);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      if (error instanceof AxiosError) {
+        toast(error.response?.data?.message || "Failed to add notice", {
+          type: "error",
+        });
+      } else {
+        toast("Something went wrong", { type: "error" });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    //   postData();
-    //  },[]);
+  //  useEffect(()=>{
+  //   const postData = async()=>{
+  //     try {
+
+  //     } catch (error) {
+
+  //     }
+  //   }
+
+  //   postData();
+  //  },[]);
 
   return (
     <div className="flex w-full p-6 flex-col">
@@ -161,10 +163,11 @@ function AddNoticePage() {
             className="rounded-md bg-green-600 px-4 py-2 cursor-pointer text-white hover:bg-green-700"
             disabled={loading}
           >
-            {loading ? 
-      <FaSpinner className="animate-spin text-white" size={16} />
-     : 'Submit'}
-
+            {loading ? (
+              <FaSpinner className="animate-spin text-white" size={16} />
+            ) : (
+              "Submit"
+            )}
           </button>
           <button
             type="button"
@@ -176,7 +179,6 @@ function AddNoticePage() {
           </button>
         </div>
       </form>
-     
     </div>
   );
 }

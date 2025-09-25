@@ -54,7 +54,7 @@ function Sidebar({
                 <Link
                   onClick={() => {
                     setOpenSubmenu(
-                      openSubmenu === item.title ? null : item.title
+                      openSubmenu === item.title ? null : item.title,
                     );
                   }}
                   to={item.path || "#"}
@@ -70,7 +70,8 @@ function Sidebar({
                 </Link>
                 {openSubmenu === item.title && (
                   <ul key={item.title} className="space-y-2">
-                    {item.children.map((child: any) => (
+          
+                    {item.children.map((child) => (
                       <li key={child.path}>
                         {/* child main button */}
                         <Link
@@ -89,7 +90,7 @@ function Sidebar({
                   </ul>
                 )}
               </li>
-            )
+            ),
           )}
 
           {/* <li>

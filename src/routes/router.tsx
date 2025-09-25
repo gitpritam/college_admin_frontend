@@ -5,6 +5,7 @@ import AddStudentPage from "../pages/student/addStudent/AddStudent.page";
 import AddNoticePage from "../pages/notice/AddNotice.page";
 import AddEventPage from "../pages/eventss/AddEvent.page";
 import LoginPage from "../pages/auth/login.page";
+import EventList from "../pages/eventss/list/eventList.page";
 
 const Router = createBrowserRouter([
   {
@@ -63,7 +64,7 @@ const Router = createBrowserRouter([
         children: [
           {
             path: "list",
-            element: <h1>Event List</h1>,
+            element: <EventList />,
           },
           {
             path: "add",

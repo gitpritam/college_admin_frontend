@@ -28,7 +28,7 @@ export const facultyValidationSchema = z.object({
     .string()
     .regex(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "Invalid email format"
+      "Invalid email format",
     ),
 
   qualification: z
@@ -55,7 +55,7 @@ export const facultyValidationSchema = z.object({
     .string()
     .regex(
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/,
-      "Password must contain at least one uppercase letter, one number, and one special character"
+      "Password must contain at least one uppercase letter, one number, and one special character",
     )
     .optional(),
 
@@ -68,20 +68,20 @@ export const facultyValidationSchema = z.object({
     .min(2, "Posted by should be at least 2 characters")
     .max(20, "Posted by should be at most 20 characters")
     .optional(),
-    role:z.enum(['admin','staff','faculty', "guest"]).optional(),
+  role: z.enum(["admin", "staff", "faculty", "guest"]).optional(),
 });
 
 export const profilePhotoValidationSchema = z.object({
   profile_photo: z
-    .any().optional()
+    .any()
+    .optional()
     .refine((file) => file instanceof File, "Profile photo is required")
     .refine(
       (file) => file && file.size <= 0.5 * 1024 * 1024, // 500kB limit
-      "Profile photo must be less than 500KB"
+      "Profile photo must be less than 500KB",
     )
     .refine(
-      (file) =>
-        file && ["image/jpeg", "image/jpg"].includes(file.type),
-      "Profile photo must be a JPEG, JPG image"
+      (file) => file && ["image/jpeg", "image/jpg"].includes(file.type),
+      "Profile photo must be a JPEG, JPG image",
     ),
 });

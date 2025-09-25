@@ -100,7 +100,7 @@ function AddFacultyPage() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -154,19 +154,19 @@ function AddFacultyPage() {
         .omit({ faculty_id: true, posted_by: true })
         .safeParse(formData);
       const currentAddressValidateData = addressValidationSchema.safeParse(
-        formData.current_address
+        formData.current_address,
       );
       const permanentAddressValidateData = addressValidationSchema.safeParse(
-        formData.permanent_address
+        formData.permanent_address,
       );
       if (profilePhoto) {
         const profilePhotoValidateData = profilePhotoValidationSchema.safeParse(
-          { profile_photo: profilePhoto }
+          { profile_photo: profilePhoto },
         );
 
         if (!profilePhotoValidateData.success) {
           const errors = z.treeifyError(
-            profilePhotoValidateData.error
+            profilePhotoValidateData.error,
           ).properties;
           setProfilePhotoError(errors);
           return;
@@ -175,14 +175,14 @@ function AddFacultyPage() {
 
       if (!currentAddressValidateData.success) {
         const errors = z.treeifyError(
-          currentAddressValidateData.error
+          currentAddressValidateData.error,
         ).properties;
         setCurrentAddressError(errors);
         return;
       }
       if (!permanentAddressValidateData.success) {
         const errors = z.treeifyError(
-          permanentAddressValidateData.error
+          permanentAddressValidateData.error,
         ).properties;
         setPermanentAddressError(errors);
         return;
@@ -213,24 +213,26 @@ function AddFacultyPage() {
       Object.entries(currentAddressValidateData.data).forEach(
         ([key, value]) => {
           sendFormData.append(`current_address[${key}]`, value);
-        }
+        },
       );
 
       Object.entries(permanentAddressValidateData.data).forEach(
         ([key, value]) => {
           sendFormData.append(`permanent_address[${key}]`, value);
-        }
+        },
       );
       for (const [key, value] of sendFormData.entries()) {
-  console.log(`${key}: ${value}`);
-}
+        console.log(`${key}: ${value}`);
+      }
       if (validateData.data.role)
         sendFormData.append("role", validateData.data.role);
 
       if (profilePhoto) sendFormData.append("profile_picture", profilePhoto);
 
       console.log(validateData.data);
-      const response = await api.post("/faculty", sendFormData, {headers:{"Content-Type":"multipart/form-data" }});
+      const response = await api.post("/faculty", sendFormData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       if (response.status === 201) {
         handleReset();
         toast("Faculty added successfully", { type: "success" });

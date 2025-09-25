@@ -30,11 +30,10 @@ function AddEventPage() {
       }
     | undefined
   >(undefined);
-  const [loading, setLoading] = useState<boolean >(false);
-  
+  const [loading, setLoading] = useState<boolean>(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -52,42 +51,42 @@ function AddEventPage() {
     });
   };
 
-   const handleSubmit = async (e: React.FormEvent) => {
-       e.preventDefault();
-       setError(undefined);
-       setLoading(true);
-       try {
-         const validateData = eventValidationSchema
-           .omit({ event_id: true, posted_by: true })
-           .safeParse(formData);
-         console.log("Validated data:", validateData);
-         if (!validateData.success) {
-           const errors = z.treeifyError(validateData.error).properties;
-           console.log(errors);
-           setError(errors);
-           return;
-         }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(undefined);
+    setLoading(true);
+    try {
+      const validateData = eventValidationSchema
+        .omit({ event_id: true, posted_by: true })
+        .safeParse(formData);
+      console.log("Validated data:", validateData);
+      if (!validateData.success) {
+        const errors = z.treeifyError(validateData.error).properties;
+        console.log(errors);
+        setError(errors);
+        return;
+      }
 
-         console.log(validateData.data);
-         const response = await api.post('/event', validateData.data);
-         if(response.status === 201){
-          handleReset();
-          toast('Event added successfully', { type: 'success' });
-         }
-         console.log(response);
-       } catch (error) {
-         console.error("Error submitting form:", error);
-         if(error instanceof AxiosError){
-          toast(error.response?.data?.message || 'Failed to add event', { type: 'error' });
-         }else{
-          toast('Something went wrong', { type: 'error' });
-         }
-       }finally{
-        setLoading(false);
-       }
-     };
-   
-     
+      console.log(validateData.data);
+      const response = await api.post("/event", validateData.data);
+      if (response.status === 201) {
+        handleReset();
+        toast("Event added successfully", { type: "success" });
+      }
+      console.log(response);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      if (error instanceof AxiosError) {
+        toast(error.response?.data?.message || "Failed to add event", {
+          type: "error",
+        });
+      } else {
+        toast("Something went wrong", { type: "error" });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex w-full p-6 flex-col">
@@ -233,30 +232,30 @@ function AddEventPage() {
             </div>
           </div>
         </div>
-           <div className="button_group flex gap-3 my-5">
-                   <button
-                     type="submit"
-                     className="rounded-md bg-green-600 px-4 py-2 cursor-pointer text-white hover:bg-green-700"
-                     disabled={loading}
-                   >
-                     {loading ? 
-               <FaSpinner className="animate-spin text-white" size={16} />
-              : 'Submit'}
-         
-                   </button>
-                   <button
-                     type="button"
-                     onClick={handleReset}
-                     disabled={loading}
-                     className="rounded-md bg-red-600 px-4 py-2 cursor-pointer text-white hover:bg-red-700"
-                   >
-                     Reset
-                   </button>
-                 </div>
-               </form>
-             </div>
+        <div className="button_group flex gap-3 my-5">
+          <button
+            type="submit"
+            className="rounded-md bg-green-600 px-4 py-2 cursor-pointer text-white hover:bg-green-700"
+            disabled={loading}
+          >
+            {loading ? (
+              <FaSpinner className="animate-spin text-white" size={16} />
+            ) : (
+              "Submit"
+            )}
+          </button>
+          <button
+            type="button"
+            onClick={handleReset}
+            disabled={loading}
+            className="rounded-md bg-red-600 px-4 py-2 cursor-pointer text-white hover:bg-red-700"
+          >
+            Reset
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
-
 
 export default AddEventPage;

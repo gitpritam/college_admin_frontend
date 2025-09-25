@@ -17,7 +17,7 @@ export const noticeValidationSchema = z.object({
     (value) => {
       return value >= 1900 && value <= new Date().getFullYear();
     },
-    { message: "Year must be between 1900 and the current year" }
+    { message: "Year must be between 1900 and the current year" },
   ),
 
   posted_by: z

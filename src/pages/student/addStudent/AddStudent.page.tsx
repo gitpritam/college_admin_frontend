@@ -93,7 +93,7 @@ function AddStudentPage() {
   >(undefined);
 
   const [passport_photo, setPassportPhoto] = useState<File | undefined>(
-    undefined
+    undefined,
   );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +103,7 @@ function AddStudentPage() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -153,10 +153,10 @@ function AddStudentPage() {
         .omit({ student_id: true, posted_by: true })
         .safeParse(formData);
       const currentAddressValidateData = addressValidationSchema.safeParse(
-        formData.current_address
+        formData.current_address,
       );
       const permanentAddressValidateData = addressValidationSchema.safeParse(
-        formData.permanent_address
+        formData.permanent_address,
       );
       if (passport_photo) {
         const passportPhotoValidateData =
@@ -166,7 +166,7 @@ function AddStudentPage() {
 
         if (!passportPhotoValidateData.success) {
           const errors = z.treeifyError(
-            passportPhotoValidateData.error
+            passportPhotoValidateData.error,
           ).properties;
           setPassportPhotoError(errors);
           return;
@@ -175,14 +175,14 @@ function AddStudentPage() {
 
       if (!currentAddressValidateData.success) {
         const errors = z.treeifyError(
-          currentAddressValidateData.error
+          currentAddressValidateData.error,
         ).properties;
         setCurrentAddressError(errors);
         return;
       }
       if (!permanentAddressValidateData.success) {
         const errors = z.treeifyError(
-          permanentAddressValidateData.error
+          permanentAddressValidateData.error,
         ).properties;
         setPermanentAddressError(errors);
         return;
@@ -206,28 +206,27 @@ function AddStudentPage() {
       sendFormData.append("guardian_name", validateData.data.guardian_name);
       sendFormData.append(
         "guardian_email",
-        validateData.data.guardian_email ?? ""
+        validateData.data.guardian_email ?? "",
       );
       sendFormData.append(
         "guardian_phone_number",
-        validateData.data.guardian_phone_number
+        validateData.data.guardian_phone_number,
       );
       sendFormData.append("department", validateData.data.department);
 
       Object.entries(currentAddressValidateData.data).forEach(
         ([key, value]) => {
           sendFormData.append(`current_address[${key}]`, value);
-        }
+        },
       );
 
       Object.entries(permanentAddressValidateData.data).forEach(
         ([key, value]) => {
           sendFormData.append(`permanent_address[${key}]`, value);
-        }
+        },
       );
 
-      if (passport_photo)
-        sendFormData.append("passport", passport_photo);
+      if (passport_photo) sendFormData.append("passport", passport_photo);
 
       console.log(validateData.data);
       const response = await api.post("/students", sendFormData, {

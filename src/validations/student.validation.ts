@@ -40,7 +40,7 @@ export const studentValidationSchema = z.object({
     .string()
     .regex(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "Invalid email format"
+      "Invalid email format",
     ),
 
   guardian_name: z
@@ -56,7 +56,7 @@ export const studentValidationSchema = z.object({
     .string()
     .regex(
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      "Invalid email format"
+      "Invalid email format",
     )
     .optional(),
 
@@ -82,13 +82,16 @@ export const passportPhotoValidationSchema = z.object({
   passport_photo: z
     .any()
     .optional()
-    .refine((file) => {console.log(typeof file);return file instanceof File}, "Passport photo is required")
+    .refine((file) => {
+      console.log(typeof file);
+      return file instanceof File;
+    }, "Passport photo is required")
     .refine(
       (file) => file && file.size <= 0.5 * 1024 * 1024,
-      "Passport photo must be less than 500KB"
+      "Passport photo must be less than 500KB",
     )
     .refine(
       (file) => file && ["image/jpeg", "image/jpg"].includes(file.type),
-      "Passport photo must be a JPEG, JPG image"
+      "Passport photo must be a JPEG, JPG image",
     ),
 });
