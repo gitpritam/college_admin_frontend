@@ -3,11 +3,11 @@ import type { IAddress } from "../../../@types/interface/address.interface";
 interface AddressProps {
   input: IAddress;
   setInput: React.Dispatch<React.SetStateAction<IAddress>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any;
 }
 
 function Address({ input, setInput, error }: AddressProps) {
-  console.log(error);
   return (
     <>
       <div className="form_group flex gap-3 my-1 flex-col lg:flex-row">
