@@ -23,7 +23,11 @@ const FACULTY_COL_DEF: ColDef[]= [
         headerName: "DATE OF BIRTH",
         sortable: true,
         filter: true,
-        width: 150
+        width: 150,
+        valueFormatter: (params) => {
+      console.log(params);
+      return new Date(params.value).toLocaleDateString()
+    },
     },
     {
         field: "phone_number",
@@ -61,7 +65,7 @@ const FACULTY_COL_DEF: ColDef[]= [
         width: 100
     },
     //  {
-    //     field: "experiment",
+    //     field: "experience",
     //     headerName: "EXPERIENCE",
     //     sortable: true,
     //     filter: true,
@@ -72,12 +76,29 @@ const FACULTY_COL_DEF: ColDef[]= [
         headerName: "JOINING DATE",
         sortable: true,
         filter: true,
-        width: 150
+        width: 150,
+        sort: "desc",
+        valueFormatter: (params) => {
+            console.log(params);
+            return new Date(params.value).toLocaleDateString() 
+               
+        }
     },
+
     {
-        field: "createdAt",
-        headerName:"REGISTERED AT",
-        sort: 'desc'
-    }
+    field: "createdAt",
+    headerName: "Registered At",
+    sortable: true, sort: 'desc',
+    valueFormatter: (params) => {
+      console.log(params);
+      return (
+        new Date(params.value).toLocaleDateString() +
+        " " +
+        new Date(params.value).toLocaleTimeString(undefined, {
+          hourCycle: "h12",
+        })
+      );
+    },
+  },
 ];
 export default FACULTY_COL_DEF;

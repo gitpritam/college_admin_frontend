@@ -13,7 +13,7 @@ function EventList() {
           const response = await api.get('/event');
           console.log(response);
           if(response.status === 200){
-            const {currentPage, data, limit, totalCount, totalPages} = response.data.result;
+            const {data} = response.data.result;
             setRowData(data);
           }
         } catch (error) {

@@ -23,7 +23,11 @@ const STUDENT_COL_DEF: ColDef[]= [
         headerName: "DATE OF BIRTH",
         sortable: true,
         filter: true,
-        width: 150
+        width: 150,
+        valueFormatter: (params) => {
+      console.log(params);
+      return new Date(params.value).toLocaleDateString() 
+    },
     },
     {
         field: "phone_number",
