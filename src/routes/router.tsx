@@ -6,6 +6,9 @@ import AddNoticePage from "../pages/notice/AddNotice.page";
 import AddEventPage from "../pages/eventss/AddEvent.page";
 import LoginPage from "../pages/auth/login.page";
 import EventList from "../pages/eventss/list/eventList.page";
+import NoticeList from "../pages/notice/list/noticeList.page";
+import FacultyList from "../pages/faculty/list/facultyList.page";
+import StudentList from "../pages/student/list/studentList.page";
 
 const Router = createBrowserRouter([
   {
@@ -20,11 +23,11 @@ const Router = createBrowserRouter([
         path: "faculty",
         children: [
           {
-            path: "list", // /faculty/list
-            element: <h1>Faculty List</h1>,
+            path: "list", 
+            element: <FacultyList/>,
           },
           {
-            path: "add", // /faculty/add
+            path: "add", 
             element: <AddFacultyPage />,
           },
         ],
@@ -34,7 +37,7 @@ const Router = createBrowserRouter([
         children: [
           {
             path: "list",
-            element: <h1>Student List</h1>,
+            element: <StudentList/>,
           },
           {
             path: "add",
@@ -51,7 +54,7 @@ const Router = createBrowserRouter([
           },
           {
             path: "list",
-            element: <h1>Notice List</h1>,
+            element: <NoticeList/>,
           },
           {
             path: "add",
