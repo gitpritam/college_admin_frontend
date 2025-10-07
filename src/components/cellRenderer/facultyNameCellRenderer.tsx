@@ -2,7 +2,7 @@ import { IoPersonOutline } from "react-icons/io5";
 import getFullName from "../../utils/getFullName";
 import { Link } from "react-router";
 
-function StudentNameCellRenderer({data}) {
+function FacultyNameCellRenderer({ data }) {
   console.log(data);
   const fullName = getFullName(
     data.first_name,
@@ -28,4 +28,4 @@ function StudentNameCellRenderer({data}) {
   );
 }
 
-export default StudentNameCellRenderer;
+export default FacultyNameCellRenderer;

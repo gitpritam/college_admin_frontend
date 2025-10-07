@@ -1,10 +1,7 @@
 import type { ColDef } from "ag-grid-community";
-import getFullName from "../../utils/getFullName";
-
-/*
- field name === je data as6e tar property name. bujhli?
- yes 
- */
+import type { ICellRendererParams } from "ag-grid-community";
+import type { IFaculty } from "../../@types/interface/faculty.interface";
+import FacultyNameCellRenderer from "../../components/cellRenderer/facultyNameCellRenderer";
 
 const FACULTY_COL_DEF: ColDef[]= [
     {
@@ -19,9 +16,7 @@ const FACULTY_COL_DEF: ColDef[]= [
         sortable: true,
         filter: true,
         width: 150,
-        valueFormatter: (params) => {
-            return getFullName(params.data.first_name, params.data.last_name, params.data?.middle_name) ;
-        }
+        cellRenderer:(params: ICellRendererParams<IFaculty>)=> <FacultyNameCellRenderer data={params.data}/>
     },
     {
         field: "dob",
