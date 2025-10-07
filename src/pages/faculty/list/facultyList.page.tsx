@@ -14,7 +14,7 @@ function FacultyList() {
           const response = await api.get('/faculty');
           console.log(response);
           if(response.status === 200){
-            const {currentPage, data, limit, totalCount, totalPages} = response.data.result;
+            const {data} = response.data.result;
             setRowData(data);
           }
         } catch (error) {

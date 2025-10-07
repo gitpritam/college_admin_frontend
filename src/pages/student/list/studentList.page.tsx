@@ -11,10 +11,10 @@ function StudentList() {
   useEffect(()=>{
     const fetchData = async()=>{
         try {
-          const response = await api.get('/faculty');
+          const response = await api.get('/students');
           console.log(response);
           if(response.status === 200){
-            const {currentPage, data, limit, totalCount, totalPages} = response.data.result;
+            const data = response.data.result;
             setRowData(data);
           }
         } catch (error) {

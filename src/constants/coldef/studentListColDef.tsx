@@ -44,7 +44,7 @@ const STUDENT_COL_DEF: ColDef[]= [
         headerName: "GUARDIAN NAME",
         sortable: true,
         filter: true,
-        width: 150
+        width: 180
     },
    
     {
