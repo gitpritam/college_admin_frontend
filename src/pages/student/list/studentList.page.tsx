@@ -1,4 +1,3 @@
-
 import { AgGridReact } from 'ag-grid-react';
 import { useEffect, useState } from 'react';
 import api from '../../../config/axios.config';

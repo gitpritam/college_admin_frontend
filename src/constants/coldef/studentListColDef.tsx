@@ -25,8 +25,8 @@ const STUDENT_COL_DEF: ColDef[]= [
         filter: true,
         width: 150,
         valueFormatter: (params) => {
-      console.log(params);
-      return new Date(params.value).toLocaleDateString() 
+        console.log(params);
+        return new Date(params.value).toLocaleDateString() 
     },
     },
     {
