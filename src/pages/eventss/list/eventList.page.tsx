@@ -62,7 +62,7 @@ function EventList() {
        <form className="flex items-center gap-2 my-2 flex-wrap" onSubmit={handleSearch}>
         <input
           type="text"
-          placeholder="Search (Title/Notice ID/ Year)"
+          placeholder="Search (Title/Event ID/ Venue)"
           className="flex-grow px-2 py-2 border-1 border-gray-400 rounded-md"
         />
         <button
