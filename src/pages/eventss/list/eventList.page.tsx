@@ -7,7 +7,7 @@ import Pagination from '../../../components/pagination/Pagination';
 function EventList() {
   const [rowData, setRowData] = useState(undefined);
   const [pagination, setPagination] = useState<{
-     currentPage: number;
+    currentPage: number;
     limit: number;
     totalCount: number;
     totalPages: number;
@@ -23,13 +23,13 @@ function EventList() {
   useEffect(()=>{
     const fetchData = async()=>{
         try {
-         const response = await api.get(
+        const response = await api.get(
           `/event?page=${pagination.currentPage}&limit=${pagination.limit}&query=${query}`,
         );
           
           console.log(response);
           if(response.status === 200){
-            const { currentPage,totalPages,totalCount,data}=
+            const { currentPage,totalPages,totalCount,data,limit}=
             response.data.result;
             setRowData(data);
             setPagination({
@@ -42,7 +42,7 @@ function EventList() {
         } catch (error) {
           console.log(error);
         }
-    }
+    };
     fetchData();
 
   },[pagination.currentPage, pagination.limit, query]);
