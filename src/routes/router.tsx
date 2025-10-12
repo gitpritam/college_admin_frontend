@@ -9,6 +9,7 @@ import EventList from "../pages/eventss/list/eventList.page";
 import NoticeList from "../pages/notice/list/noticeList.page";
 import FacultyList from "../pages/faculty/list/facultyList.page";
 import StudentList from "../pages/student/list/studentList.page";
+import NoticePreview from "../pages/notice/preview/NoticePreview.page";
 
 const Router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const Router = createBrowserRouter([
             path: "add",
             element: <AddNoticePage />,
           },
+          {
+            path:":notice_id",
+            element: <NoticePreview/>
+          }
         ],
       },
       {
