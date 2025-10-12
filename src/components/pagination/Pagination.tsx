@@ -27,7 +27,7 @@ function Pagination({
     { length: endPage - startPage + 1 },
     (_, i) => startPage + i
   );
-
+  
   return (
     <div className="flex justify-center items-center gap-1 my-2">
       {/* Previous Button */}

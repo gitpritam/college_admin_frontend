@@ -13,12 +13,12 @@ function StudentList() {
           const response = await api.get('/students');
           console.log(response);
           if(response.status === 200){
-            const data = response.data.result;
+            const {data} = response.data.result;
             setRowData(data);
           }
         } catch (error) {
           console.log(error);
-        }
+        } 
     }
     fetchData();
 
