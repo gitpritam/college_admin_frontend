@@ -16,7 +16,7 @@ function FacultyList() {
   }>({
     currentPage: 1,
     totalPages: 0,
-    limit: 10,
+    limit: 5,
     totalCount: 0,
   });
   const[query, setQuery]= useState<string>("");

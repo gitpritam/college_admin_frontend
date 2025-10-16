@@ -15,7 +15,7 @@ function NoticeActionCellRenderer({ params }) {
       `Are you sure to delete this notice [${data.notice_id}]?`,
     );
     if (!result) return;
-    console.log("This iline workls")
+    console.log("This line works");
 
     try {
       const response = await api.delete(`/notice/${data.notice_id}`);

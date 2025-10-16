@@ -13,7 +13,7 @@ function NoticeList() {
     totalPages: number;
   }>({
     currentPage: 1,
-    limit: 10,
+    limit: 5,
     totalCount: 0,
     totalPages: 0,
   });
