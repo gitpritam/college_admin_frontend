@@ -16,6 +16,7 @@ function EventActionCellRenderer({ params }) {
       );
       if (!result) return;
       console.log("This line works")
+      
         try {
             const response = await api.delete(`/event/${data.event_id}`);
             if (response.status === 200) {
