@@ -1,4 +1,7 @@
-import type { ColDef } from "ag-grid-community";
+import type { ColDef, ICellRendererParams } from "ag-grid-community";
+import type { IEvent } from "../../@types/interface/event.interface";
+import EventActionCellRenderer from "../../components/cellRenderer/action/eventActionCellRenderer";
+
 const EVENT_LIST_COLDEF: ColDef[] = [
   {
     field: "event_id",
@@ -71,6 +74,11 @@ const EVENT_LIST_COLDEF: ColDef[] = [
       );
     },
   },
+
+  {
+          headerName: 'ACTION',
+          cellRenderer: (params:ICellRendererParams<IEvent>)=>{return <EventActionCellRenderer params={params}/>}
+      }
 ];
 
 export default EVENT_LIST_COLDEF;

@@ -27,8 +27,9 @@ function EventActionCellRenderer({ params }) {
             console.log(error);
         }
     };
-  return (
+ return (
     <div className="flex justify-center items-center gap-2">
+      {/* View Button */}
       <button
         onClick={handlePreviewClick}
         title="View"
@@ -36,10 +37,11 @@ function EventActionCellRenderer({ params }) {
       >
         <MdOutlineRemoveRedEye size={18} />
       </button>
+      {/* Delete Button */}               
         <button
-            onClick={handleEventDelete}
-            title="Delete"
-            className="p-2 rounded-full text-red-600 hover:bg-red-100 transition-colors duration-200"
+        onClick={handleEventDelete}
+        title="Delete"
+        className="p-2 rounded-full text-red-600 hover:bg-red-100 transition-colors duration-200"
       >
         <MdOutlineDelete size={18} />
       </button>

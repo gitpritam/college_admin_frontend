@@ -10,9 +10,8 @@ interface IUser {
   last_name: string;
 }
 
-interface INotice {
-  notice_id: string;
-  year: string;
+interface IEvent {
+  event_id: string;
   title: string;
   description: string;
   posted_by?: IUser;
@@ -21,15 +20,15 @@ interface INotice {
 }
 
 // ---------- Component ----------
-const NoticePreview: React.FC = () => {
-  const [data, setData] = useState<INotice | null>(null);
+const EventPreview: React.FC = () => {
+  const [data, setData] = useState<IEvent | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const { notice_id } = useParams<{ notice_id: string }>();
+  const { event_id } = useParams<{ event_id: string }>();
 
   useEffect(() => {
-    const fetchNotice = async () => {
+    const fetchEvent = async () => {
       try {
-        const response = await api.get(`/notice/${notice_id}`);
+        const response = await api.get(`/event/${event_id}`);
         if (response.status === 200) {
           const { result } = response.data;
           setData(result);
@@ -41,8 +40,8 @@ const NoticePreview: React.FC = () => {
       }
     };
 
-    if (notice_id) fetchNotice();
-  }, [notice_id]);
+    if (event_id) fetchEvent();
+  }, [event_id]);
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -61,7 +60,7 @@ const NoticePreview: React.FC = () => {
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading notice...</p>
+          <p className="text-gray-600">Loading event...</p>
         </div>
       </div>
     );
@@ -73,7 +72,7 @@ const NoticePreview: React.FC = () => {
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
           <FiFileText  className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 text-lg">Notice not found</p>
+          <p className="text-gray-600 text-lg">No event found</p>
         </div>
       </div>
     );
@@ -88,10 +87,7 @@ const NoticePreview: React.FC = () => {
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-6">
             <div className="flex items-center justify-between mb-2">
               <span className="inline-block bg-white bg-opacity-20  text-sm font-semibold px-4 py-1 rounded-full">
-                {data.notice_id}
-              </span>
-              <span className="text-white text-sm font-medium">
-                Year: {data.year}
+                {data.event_id}
               </span>
             </div>
             <h1 className="text-3xl font-bold text-white mt-4">{data.title}</h1>
@@ -141,5 +137,4 @@ const NoticePreview: React.FC = () => {
   );
 };
 
-export default NoticePreview;
-  
+export default EventPreview;
