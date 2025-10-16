@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import api from "../../../config/axios.config";
 import { FiFileText } from "react-icons/fi";
-import { IAddress } from "../../../@types/interface/address.interface";
 
 interface IUser {
   first_name: string;
@@ -23,7 +22,8 @@ interface IStudent {
   guardian_email: string;
   department: string;
   passport_photo: string;
-  address: IAddress;
+  current_address: string;
+  permanent_address: string;
   posted_by?: IUser;
   createdAt: string;
   updatedAt: string;
@@ -96,7 +96,7 @@ const StudentPreview: React.FC = () => {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-8 flex items-center gap-6">
           <img
             src={data.passport_photo}
-            alt="Student"
+            alt = "Student"
             className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover"
           />
           <div>

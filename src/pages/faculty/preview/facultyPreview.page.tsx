@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import api from "../../../config/axios.config";
 import { FiFileText } from "react-icons/fi";
-import type { IAddress } from "../../../@types/interface/address.interface";
-
 
 interface IUser {
   first_name: string;
@@ -25,7 +23,7 @@ interface IFaculty {
   joining_date: string;
   role: string;
   profile_photo: string;
-  address: IAddress;
+  address: string;
   posted_by?: IUser;
   createdAt: string;
   updatedAt: string;
