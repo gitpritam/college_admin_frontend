@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import api from "../../../config/axios.config";
 import { FiFileText } from "react-icons/fi";
-import type { IAddress } from "../../../@types/interface/address.interface";
-import { FaEnvelope, FaHome, FaRegCalendarAlt, FaRegUser, FaUserGraduate, FaUserShield } from "react-icons/fa";
-
+import { IAddress } from "../../../@types/interface/address.interface";
 
 interface IUser {
   first_name: string;
@@ -13,16 +11,18 @@ interface IUser {
 
 interface IStudent {
   student_id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
   dob: string;
   email: string;
   phone: string;
   phone_number: string;
   guardian_name: string;
-  guardian_phone: string;
+  guardian_phone_number: string;
   guardian_email: string;
   department: string;
-  passport_photo: URL;
+  passport_photo: string;
   address: IAddress;
   posted_by?: IUser;
   createdAt: string;
@@ -100,7 +100,7 @@ const StudentPreview: React.FC = () => {
             className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover"
           />
           <div>
-            <h1 className="text-3xl font-bold text-white">{data.getFullName}</h1>
+            <h1 className="text-3xl font-bold text-white">{data.first_name} {data.last_name} {data.middle_name}</h1>
             <p className="text-blue-100 text-sm mt-1">Student ID: {data.student_id}</p>
             <p className="text-blue-100 text-sm">Department: {data.department}</p>
           </div>
@@ -112,11 +112,11 @@ const StudentPreview: React.FC = () => {
             <h2 className="text-lg font-semibold text-gray-800 mb-3">Student Details</h2>
             <div className="space-y-2 text-gray-700">
               <p><span className="font-medium">Student ID:</span> {data.student_id}</p>
-              <p><span className="font-medium">Name:</span> {data.getFullName}</p>
+              <p><span className="font-medium">Name:</span> {data.first_name} {data.last_name} {data.middle_name}</p>
               <p><span className="font-medium">Email:</span> {data.email}</p>
               <p><span className="font-medium">Phone Number:</span> {data.phone_number}</p>
               <p><span className="font-medium">Guardian Name:</span> {data.guardian_name}</p>
-              <p><span className="font-medium">Guardian Phone Number:</span> {data.guardian_phone}</p>
+              <p><span className="font-medium">Guardian Phone Number:</span> {data.guardian_phone_number}</p>
               <p><span className="font-medium">Guardian Email:</span> {data.guardian_email}</p>
               <p><span className="font-medium">Department:</span> {data.department}</p>
             </div>

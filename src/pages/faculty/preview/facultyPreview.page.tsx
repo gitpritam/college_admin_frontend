@@ -12,7 +12,9 @@ interface IUser {
 
 interface IFaculty {
   faculty_id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
   dob: string;
   email: string;
   phone_number: string;
@@ -21,6 +23,7 @@ interface IFaculty {
   designation: string;
   experience: number;
   joining_date: string;
+  role: string;
   profile_photo: string;
   address: IAddress;
   posted_by?: IUser;
@@ -99,7 +102,7 @@ return (
             className="w-24 h-24 rounded-full border-4 border-white shadow-md object-cover"
           />
           <div>
-            <h1 className="text-3xl font-bold text-white">{data.name}</h1>
+            <h1 className="text-3xl font-bold text-white">{data.first_name} {data.last_name} {data.middle_name}</h1>
             <p className="text-blue-100 text-sm mt-1">Faculty ID: {data.faculty_id}</p>
             <p className="text-blue-100 text-sm">Department: {data.department}</p>
             <p className="text-blue-100 text-sm">Designation: {data.designation}</p>
@@ -112,7 +115,7 @@ return (
             <h2 className="text-lg font-semibold text-gray-800 mb-3">Faculty Details</h2>
             <div className="space-y-2 text-gray-700">
               <p><span className="font-medium">Faculty ID:</span> {data.faculty_id}</p>
-              <p><span className="font-medium">Name:</span> {data.name}</p>
+              <p><span className="font-medium">Name:</span> {data.first_name} {data.last_name} {data.middle_name}</p>
               <p><span className="font-medium">Date of Birth:</span> {formatDate(data.dob)}</p>
               <p><span className="font-medium">Email:</span> {data.email}</p>
               <p><span className="font-medium">Phone Number:</span> {data.phone_number}</p>
@@ -121,6 +124,7 @@ return (
               <p><span className="font-medium">Designation:</span> {data.designation}</p>
               <p><span className="font-medium">Experience:</span> {data.experience} years</p>
               <p><span className="font-medium">Joining Date:</span> {formatDate(data.joining_date)}</p>
+              <p><span className="font-medium">Role:</span> {data.role}</p>
             </div>
           </div>
 
