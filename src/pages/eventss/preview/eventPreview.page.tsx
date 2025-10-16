@@ -54,7 +54,7 @@ const EventPreview: React.FC = () => {
     });
   };
 
-  // ---------- Loading ----------
+  // ---------- Loading ---------- 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
@@ -117,7 +117,7 @@ const EventPreview: React.FC = () => {
           <div className="px-8 py-8">
             <div className="prose max-w-none">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">
-                Notice Details
+                Event Details
               </h2>
               <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">
                 {data.description}

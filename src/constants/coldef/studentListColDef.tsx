@@ -2,6 +2,7 @@ import type { ColDef } from "ag-grid-community";
 import StudentNameCellRenderer from "../../components/cellRenderer/studentNameCellRenderer";
 import type { ICellRendererParams } from 'ag-grid-community';
 import type { IStudent } from "../../@types/interface/student.interface";
+import StudentActionCellRenderer from "../../components/cellRenderer/action/studentActionCellRenderer";
 
 const STUDENT_COL_DEF: ColDef[]= [
     {
@@ -58,5 +59,9 @@ const STUDENT_COL_DEF: ColDef[]= [
         filter: true,
         width: 100
     },
+    {
+        headerName: "ACTION",
+        cellRenderer: (params:ICellRendererParams<IStudent>)=>{return <StudentActionCellRenderer params={params}/>}
+    }
 ];
 export default STUDENT_COL_DEF;

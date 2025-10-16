@@ -11,6 +11,8 @@ import FacultyList from "../pages/faculty/list/facultyList.page";
 import StudentList from "../pages/student/list/studentList.page";
 import NoticePreview from "../pages/notice/preview/NoticePreview.page";
 import EventPreview from "../pages/eventss/preview/eventPreview.page";
+import FacultyPreview from "../pages/faculty/preview/facultyPreview.page";
+import StudentPreview from "../pages/student/preview/studentPreview.page";
 
 const Router = createBrowserRouter([
   {
@@ -32,6 +34,10 @@ const Router = createBrowserRouter([
             path: "add", 
             element: <AddFacultyPage />,
           },
+          {
+            path:":faculty_id",
+            element: <FacultyPreview/>
+          }
         ],
       },
       {
@@ -45,6 +51,10 @@ const Router = createBrowserRouter([
             path: "add",
             element: <AddStudentPage />,
           },
+          {
+            path:":student_id",
+            element: <StudentPreview/>
+          }
         ],
       },
       {
@@ -80,9 +90,10 @@ const Router = createBrowserRouter([
             element: <AddEventPage />,
           },
           {
-            path: "event_id",
+            path: ":event_id",//param similar to url param in backend
             element: <EventPreview/>
           },
+          
         ],
       },
     ],

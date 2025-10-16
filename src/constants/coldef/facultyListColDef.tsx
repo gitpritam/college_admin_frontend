@@ -2,6 +2,7 @@ import type { ColDef } from "ag-grid-community";
 import type { ICellRendererParams } from "ag-grid-community";
 import type { IFaculty } from "../../@types/interface/faculty.interface";
 import FacultyNameCellRenderer from "../../components/cellRenderer/facultyNameCellRenderer";
+import FacultyActionCellRenderer from "../../components/cellRenderer/action/facultyActionCellRenderer";
 
 const FACULTY_COL_DEF: ColDef[]= [
     {
@@ -100,5 +101,9 @@ const FACULTY_COL_DEF: ColDef[]= [
       );
     },
   },
+   {
+          headerName: 'ACTION',
+          cellRenderer: (params:ICellRendererParams<IFaculty>)=>{return <FacultyActionCellRenderer params={params}/>}
+      }
 ];
 export default FACULTY_COL_DEF;
