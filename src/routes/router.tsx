@@ -13,11 +13,12 @@ import NoticePreview from "../pages/notice/preview/NoticePreview.page";
 import EventPreview from "../pages/eventss/preview/eventPreview.page";
 import FacultyPreview from "../pages/faculty/preview/facultyPreview.page";
 import StudentPreview from "../pages/student/preview/studentPreview.page";
+import ProtectedRoute from "../components/ProtectedRoute";
 
 const Router = createBrowserRouter([
   {
     path: "/",
-    element: <DashboardLayout />,
+    element: <ProtectedRoute children={<DashboardLayout />} />,
     children: [
       {
         path: "dashboard", // /dashboard
@@ -27,17 +28,17 @@ const Router = createBrowserRouter([
         path: "faculty",
         children: [
           {
-            path: "list", 
-            element: <FacultyList/>,
+            path: "list",
+            element: <FacultyList />,
           },
           {
-            path: "add", 
+            path: "add",
             element: <AddFacultyPage />,
           },
           {
-            path:":faculty_id",
-            element: <FacultyPreview/>
-          }
+            path: ":faculty_id",
+            element: <FacultyPreview />,
+          },
         ],
       },
       {
@@ -45,16 +46,16 @@ const Router = createBrowserRouter([
         children: [
           {
             path: "list",
-            element: <StudentList/>,
+            element: <StudentList />,
           },
           {
             path: "add",
             element: <AddStudentPage />,
           },
           {
-            path:":student_id",
-            element: <StudentPreview/>
-          }
+            path: ":student_id",
+            element: <StudentPreview />,
+          },
         ],
       },
       {
@@ -66,16 +67,16 @@ const Router = createBrowserRouter([
           },
           {
             path: "list",
-            element: <NoticeList/>,
+            element: <NoticeList />,
           },
           {
             path: "add",
             element: <AddNoticePage />,
           },
           {
-            path:":notice_id",
-            element: <NoticePreview/>
-          }
+            path: ":notice_id",
+            element: <NoticePreview />,
+          },
         ],
       },
       {
@@ -90,10 +91,9 @@ const Router = createBrowserRouter([
             element: <AddEventPage />,
           },
           {
-            path: ":event_id",//param similar to url param in backend
-            element: <EventPreview/>
+            path: ":event_id", //param similar to url param in backend
+            element: <EventPreview />,
           },
-          
         ],
       },
     ],
