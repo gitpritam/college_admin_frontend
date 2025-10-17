@@ -15,11 +15,20 @@ import FacultyPreview from "../pages/faculty/preview/facultyPreview.page";
 import StudentPreview from "../pages/student/preview/studentPreview.page";
 import ProtectedRoute from "../components/ProtectedRoute";
 import NotFoundPage from "../pages/others/404";
+import DashboardProvider from "../context/dashboard/dashboard.provider";
 
 const Router = createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute children={<DashboardLayout />} />,
+    element: (
+      <ProtectedRoute
+        children={
+          <DashboardProvider>
+            <DashboardLayout />
+          </DashboardProvider>
+        }
+      />
+    ),
     children: [
       {
         path: "dashboard", // /dashboard
