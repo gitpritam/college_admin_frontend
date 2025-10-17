@@ -14,6 +14,7 @@ import EventPreview from "../pages/eventss/preview/eventPreview.page";
 import FacultyPreview from "../pages/faculty/preview/facultyPreview.page";
 import StudentPreview from "../pages/student/preview/studentPreview.page";
 import ProtectedRoute from "../components/ProtectedRoute";
+import NotFoundPage from "../pages/others/404";
 
 const Router = createBrowserRouter([
   {
@@ -104,7 +105,7 @@ const Router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <h1>404 Not Found</h1>,
+    element: <NotFoundPage />,
   },
 ]);
 

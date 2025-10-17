@@ -1,7 +1,7 @@
-//action preview, edit, delete
-//permission page grid
+//action edit
+//permission
 //contact / query
-//searching
-// global context
-// auth
-//protected route component, public route component if needed
+
+
+
+
