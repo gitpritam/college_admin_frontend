@@ -16,6 +16,7 @@ import StudentPreview from "../pages/student/preview/studentPreview.page";
 import ProtectedRoute from "../components/ProtectedRoute";
 import NotFoundPage from "../pages/others/404";
 import DashboardProvider from "../context/dashboard/dashboard.provider";
+import ContactUsPage from "../pages/contact/contactUs.page";
 
 const Router = createBrowserRouter([
   {
@@ -103,6 +104,15 @@ const Router = createBrowserRouter([
           {
             path: ":event_id", //param similar to url param in backend
             element: <EventPreview />,
+          },      
+        ],
+      },
+      {
+        path: "contact-us",
+        children: [
+          {
+            path: "contact",
+            element: <ContactUsPage />,
           },
         ],
       },
