@@ -24,11 +24,19 @@ function Sidebar({
       aria-label="Sidebar"
     >
       <div className="h-full  overflow-y-auto bg-gray-800">
-        <div className="z-50 sticky top-0 flex px-3 py-4 justify-end h-15 border-b-1 border-b-[#29384d] bg-gray-800 shadow-md ">
+      <div className="z-50 sticky top-0 flex items-center justify-between px-3 py-4 h-15 border-b border-b-[#29384d] bg-gray-800 shadow-md">
+       {/*logo*/}
+        <img
+        src="https://img.icons8.com/?size=100&id=XrRlSqHqjxqc&format=png&color=000000"
+       /*src="https://img.icons8.com/?size=100&id=XwL1uwivrCEF&format=png&color=000000"*/
+        alt="Logo"
+        className="w-10 h-10 rounded-full font-bold"
+        />
+        
           {/* Single main button */}
           <button
             onClick={handleClose}
-            className="items-center justify-center  h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700 transition "
+            className="items-center h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700 transition justify-items-center-safe "
           >
             <FaChevronLeft color="white" size={15} />
           </button>
@@ -149,6 +157,7 @@ function Sidebar({
           </li> */}
         </ul>
       </div>
+     
     </aside>
   );
 }
