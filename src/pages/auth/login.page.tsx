@@ -4,6 +4,7 @@ import { MdEmail, MdLock } from "react-icons/md";
 import api from "../../config/axios.config";
 import { useAuthContext } from "../../context/auth/useAuthContext";
 import { useNavigate } from "react-router";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginPage: React.FC = () => {
   const { onLogin, isAuthenticated } = useAuthContext();
@@ -14,13 +15,12 @@ const LoginPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [countdown, setCountdown] = useState(5);
 
-  // Redirect to dashboard if already authenticated
   React.useEffect(() => {
     if (isAuthenticated) {
       const timer = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
-            clearInterval(timer); //stop the interval when countdown is equal to 1 or less
+            clearInterval(timer);
             navigate("/dashboard");
             return 0;
           }
@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
         });
       }, 1000);
 
-      return () => clearInterval(timer); //cleanup funtion to clear interval on unmount
+      return () => clearInterval(timer);
     }
   }, [isAuthenticated, navigate]);
 
@@ -37,8 +37,6 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
     try {
       const response = await api.post("/auth/login", { email, password });
-      console.log("Login successful:", response.data);
-      //set the context here on successful login
       const { token, user } = response.data.result;
       onLogin({ token, user });
       navigate("/dashboard");
@@ -49,108 +47,85 @@ const LoginPage: React.FC = () => {
     }
   };
 
-  // Show redirect UI if already authenticated
+  // Redirect UI if already logged in
   if (isAuthenticated) {
-    //jodi ami logged in hoye thaki
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
-          <div className="bg-white shadow-xl rounded-xl p-8 border border-gray-100">
-            <div className="text-center">
-              <div className="mx-auto h-16 w-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center shadow-lg mb-6">
-                <svg
-                  className="h-8 w-8 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Already Logged In
-              </h2>
-              <p className="text-gray-600 mb-6">
-                You are already authenticated and will be redirected to the
-                dashboard.
-              </p>
-
-              {/* Countdown Display */}
-              <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                <div className="flex items-center justify-center space-x-2">
-                  <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                  <span className="text-blue-700 font-semibold">
-                    Redirecting in {countdown} second
-                    {countdown !== 1 ? "s" : ""}...
-                  </span>
-                </div>
-              </div>
-
-              {/* Manual Redirect Button */}
-              <button
-                onClick={() => navigate("/dashboard")}
-                className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-200 shadow-lg"
-              >
-                Go to Dashboard Now
-              </button>
-            </div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-8 rounded-2xl shadow-xl text-center max-w-sm">
+          <div className="w-16 h-16 mx-auto mb-4 bg-green-500 text-white rounded-full flex items-center justify-center">
+            <svg
+              className="h-8 w-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
           </div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Already Logged In
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Redirecting to the dashboard in {countdown}s...
+          </p>
+          <div className="animate-spin h-6 w-6 border-4 border-blue-500 border-t-transparent mx-auto rounded-full mb-4"></div>
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-lg shadow-md hover:opacity-90 transition"
+          >
+            Go Now
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
+      <div className="max-w-sm w-full">
         {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-            <MdLock className="h-8 w-8 text-white" />
+        <div className="text-center mb-8">
+          <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <MdLock className="h-7 w-7 text-white" />
           </div>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
-            Welcome Back
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            Sign in to your college admin portal
+          <h2 className="text-3xl font-bold text-gray-800">Welcome Back</h2>
+          <p className="text-gray-500 mt-1">
+            Sign in to continue your journey
           </p>
         </div>
 
-        {/* Login Form */}
-        <div className="bg-white shadow-xl rounded-xl p-8 border border-gray-100">
+        {/* Form Card */}
+        <div className="bg-white border border-gray-200 rounded-2xl shadow-lg p-8">
           <form className="space-y-6" onSubmit={handleSubmit}>
-            {/* Email Field */}
+            {/* Email */}
             <div>
               <label
                 htmlFor="email"
                 className="block text-sm font-semibold text-gray-700 mb-2"
               >
-                Email Address
+                Email
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <MdEmail className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-400">
+                <MdEmail className="text-gray-400 mr-2" />
                 <input
                   id="email"
                   name="email"
                   type="email"
-                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200 hover:border-gray-400 bg-white"
-                  placeholder="Enter your email address"
+                  placeholder="email"
+                  className="bg-transparent w-full outline-none text-gray-700 placeholder-gray-400"
                 />
               </div>
             </div>
 
-            {/* Password Field */}
+            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -158,125 +133,82 @@ const LoginPage: React.FC = () => {
               >
                 Password
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <MdLock className="h-5 w-5 text-gray-400" />
-                </div>
+              <div className="flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-400">
+                <MdLock className="text-gray-400 mr-2" />
                 <input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors duration-200 hover:border-gray-400 bg-white"
-                  placeholder="Enter your password"
+                  placeholder="password"
+                  className="bg-transparent w-full outline-none text-gray-700 placeholder-gray-400"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center hover:bg-gray-50 rounded-r-lg transition-colors duration-200"
                   onClick={() => setShowPassword(!showPassword)}
+                  className="text-gray-400 hover:text-gray-600"
                 >
                   {showPassword ? (
-                    <AiOutlineEyeInvisible className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <AiOutlineEyeInvisible className="h-5 w-5" />
                   ) : (
-                    <AiOutlineEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                    <AiOutlineEye className="h-5 w-5" />
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
+            {/* Remember / Forgot */}
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 text-gray-600 cursor-pointer">
                 <input
-                  id="remember-me"
-                  name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded transition-colors duration-200"
+                  className="accent-blue-500 h-4 w-4"
                 />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-3 block text-sm font-medium text-gray-700"
-                >
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors duration-200 hover:underline"
-                >
-                  Forgot password?
-                </a>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div>
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shadow-lg"
+                Remember me
+              </label>
+              <a
+                href="#"
+                className="text-blue-500 hover:text-blue-600 font-medium"
               >
-                {isLoading ? (
-                  <div className="flex items-center">
-                    <svg
-                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Signing in...
-                  </div>
-                ) : (
-                  "Sign in"
-                )}
-              </button>
+                Forgot password?
+              </a>
             </div>
+
+            {/* Sign In Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-400 py-3 rounded-lg text-white font-semibold shadow-md hover:opacity-90 transition"
+            >
+              {isLoading ? "Signing in..." : "Sign In"}
+            </button>
           </form>
 
-          {/* Additional Links */}
-          <div className="mt-8">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200" />
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500 font-medium">
-                  Need assistance?
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Don't have an account?{" "}
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500 transition-colors duration-200 hover:underline"
-                >
-                  Contact your administrator
-                </a>
-              </p>
-            </div>
+          {/* Divider */}
+          <div className="flex items-center my-6">
+            <div className="flex-1 border-t border-gray-200"></div>
+            <span className="px-3 text-gray-400 text-sm">Or continue with</span>
+            <div className="flex-1 border-t border-gray-200"></div>
           </div>
+
+          {/* Google */}
+          <button className="w-full flex items-center justify-center gap-2 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition font-medium text-gray-700">
+            <FcGoogle className="w-5 h-5" />
+            Continue with Google
+            </button>
+
+          {/* Footer */}
+          <p className="text-gray-500 text-sm mt-6 text-center">
+            Don't have an account?{" "}
+            <a
+              href="#"
+              className="text-blue-500 hover:underline font-medium"
+            >
+              Sign up
+            </a>
+          </p>
         </div>
       </div>
     </div>
