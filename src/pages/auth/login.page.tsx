@@ -3,7 +3,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { MdEmail, MdLock } from "react-icons/md";
 import api from "../../config/axios.config";
 import { useAuthContext } from "../../context/auth/useAuthContext";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { FcGoogle } from "react-icons/fc";
 
 const LoginPage: React.FC = () => {
@@ -168,12 +168,12 @@ const LoginPage: React.FC = () => {
                 />
                 Remember me
               </label>
-              <a
-                href="#"
+              <Link
+                to="#"
                 className="text-blue-500 hover:text-blue-600 font-medium"
               >
                 Forgot password?
-              </a>
+              </Link>
             </div>
 
             {/* Sign In Button */}
@@ -202,12 +202,12 @@ const LoginPage: React.FC = () => {
           {/* Footer */}
           <p className="text-gray-500 text-sm mt-6 text-center">
             Don't have an account?{" "}
-            <a
-              href="#"
-              className="text-blue-500 hover:underline font-medium"
+            <span
+            onClick={() => (window.location.href = "/signup")}
+            className="text-blue-500 hover:underline font-medium cursor-pointer"
             >
               Sign up
-            </a>
+            </span>
           </p>
         </div>
       </div>
