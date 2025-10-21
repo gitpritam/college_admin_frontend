@@ -111,7 +111,7 @@ const Router = createBrowserRouter([
         path: "contact-us",
         children: [
           {
-            path: "contact",
+            path: "/contact-us",
             element: <ContactUsPage />,
           },
         ],
