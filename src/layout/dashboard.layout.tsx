@@ -3,11 +3,14 @@ import Sidebar from "../components/dashboard/sideBar/Sidebar.component";
 import Topbar from "../components/dashboard/topBar/Topbar.component";
 import { useLayoutEffect, useState } from "react";
 import { Outlet } from "react-router";
+import useDashboardContext from "../context/dashboard/useDashboardContext";
 
 const DashboardLayout: React.FC = () => {
+  const { setPageName } = useDashboardContext();
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
   useLayoutEffect(() => {
+    setPageName("Dashboard");
     const mediaQuery = window.matchMedia("(min-width: 768px)");
     // sm breakpoint
     const handleMediaQueryChange = (event: MediaQueryListEvent) => {
@@ -21,7 +24,7 @@ const DashboardLayout: React.FC = () => {
     return () => {
       mediaQuery.removeEventListener("change", handleMediaQueryChange);
     };
-  }, [setIsSidebarOpen]);
+  }, [setIsSidebarOpen,setPageName]);
 
   return (
     <div className="h-screen bg-gray-100 flex overflow-hidden ">

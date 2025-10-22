@@ -18,6 +18,7 @@ import NotFoundPage from "../pages/others/404";
 import DashboardProvider from "../context/dashboard/dashboard.provider";
 import ContactUsPage from "../pages/contact/contactUs.page";
 import SignupPage from "../pages/auth/signup.pase";
+import MyProfilePage from "../pages/profile/profile.page";
 
 const Router = createBrowserRouter([
   {
@@ -126,6 +127,10 @@ const Router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignupPage />,
+  },
+  {
+    path: "/profile",
+    element: <MyProfilePage />,
   },
   {
     path: "*",
