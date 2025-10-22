@@ -5,8 +5,15 @@ import {
   FaWhatsapp,
 } from "react-icons/fa";
 import { Link } from "react-router";
+import useDashboardContext from "../../context/dashboard/useDashboardContext";
+import { useEffect } from "react";
 
-const ContactUsPage = () => {
+function ContactUsPage() {
+  const { setPageName } = useDashboardContext();
+  useEffect(()=>{
+    setPageName("Contact Us");
+  }, [setPageName]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-10 px-4">
       <div className="max-w-5xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden">
@@ -19,7 +26,7 @@ const ContactUsPage = () => {
                 to="https://facebook.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-white transition  hover:bg-gray-200 "
+                className="text-blue-600 hover:text-white transition"
               >
                 <FaFacebook className="text-blue-600" size={20} />
               </Link>
@@ -30,7 +37,7 @@ const ContactUsPage = () => {
                 to="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#f8008c] hover:text-white transition  hover:bg-gray-200"
+                className="text-[#f8008c] hover:text-white transition"
               >
                 <FaInstagram className="text-[#f8008c]" size={20} />
               </Link>
@@ -41,7 +48,7 @@ const ContactUsPage = () => {
                 to="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#0965c1] hover:text-white transition hover:bg-gray-200"
+                className="text-[#0965c1] hover:text-white transition"
               >
                 <FaLinkedin className="text-[#0965c1]" size={20} />
               </Link>
@@ -52,7 +59,7 @@ const ContactUsPage = () => {
                 to="https://whatsapp.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#25d366] hover:text-white transition hover:bg-gray-400"
+                className="text-[#25d366] hover:text-white transition"
               >
                 <FaWhatsapp className="text-[#25d366]" size={20} />
               </Link>

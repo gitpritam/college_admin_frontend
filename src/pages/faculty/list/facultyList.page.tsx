@@ -60,7 +60,6 @@ function FacultyList() {
 
   return (
     <div className="flex w-full p-6 flex-col">
-      <h1 className="main-heading font-bold text-xl mb-5">Faculty List</h1>
       <form
         className="flex items-center gap-2 my-2 flex-wrap"
         onSubmit={handleSearch}

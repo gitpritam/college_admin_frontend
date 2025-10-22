@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import api from '../../../config/axios.config';
 import EVENT_LIST_COLDEF from '../../../constants/coldef/eventListColDef';
 import Pagination from '../../../components/pagination/Pagination';
+import useDashboardContext from '../../../context/dashboard/useDashboardContext';
 
 function EventList() {
+  const {setPageName} = useDashboardContext();
   const [rowData, setRowData] = useState(undefined);
   const [pagination, setPagination] = useState<{
     currentPage: number;
@@ -21,6 +23,7 @@ function EventList() {
 
 
   useEffect(()=>{
+    setPageName("Event List");
     const fetchData = async()=>{
         try {
         const response = await api.get(
@@ -45,20 +48,21 @@ function EventList() {
     };
     fetchData();
 
-  },[pagination.currentPage, pagination.limit, query]);
+  },[pagination.currentPage, pagination.limit, query,setPageName]);
   
   const handlePageChange = (pageNumber: number) => {
     setPagination({ ...pagination, currentPage: pageNumber });
     console.log(pageNumber);
   };
-  const handleSearch = (e) => {
+
+ const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setQuery(e.target.elements[0].value);
+    const formElement = e.currentTarget.elements[0] as HTMLInputElement;
+    setQuery(formElement.value);
   };
 
   return (
     <div className="flex w-full p-6 flex-col">
-      <h1 className="main-heading font-bold text-xl mb-5">Event List</h1>
        <form className="flex items-center gap-2 my-2 flex-wrap" onSubmit={handleSearch}>
         <input
           type="text"
