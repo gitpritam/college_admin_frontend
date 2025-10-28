@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { IEvent } from "../../@types/interface/event.interface";
 import { eventValidationSchema } from "../../validations/event.validation";
 import z from "zod";
@@ -6,8 +6,10 @@ import { toast } from "react-toastify";
 import api from "../../config/axios.config";
 import { AxiosError } from "axios";
 import { FaSpinner } from "react-icons/fa";
+import useDashboardContext from "../../context/dashboard/useDashboardContext";
 
 function AddEventPage() {
+  const { setPageName } = useDashboardContext();
   const [formData, setFormData] = React.useState<IEvent>({
     title: "",
     description: "",
@@ -17,6 +19,10 @@ function AddEventPage() {
     end_time: "",
     venue: "",
   });
+  useEffect(() => {
+      setPageName("Add Event");
+    }, [setPageName]);
+  
 
   const [error, setError] = useState<
     | {
@@ -90,7 +96,6 @@ function AddEventPage() {
 
   return (
     <div className="flex w-full p-6 flex-col">
-      <h1 className="main-heading font-bold text-xl mb-5">Add Event</h1>
       <form
         noValidate
         onSubmit={handleSubmit}

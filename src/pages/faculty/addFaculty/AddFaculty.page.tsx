@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Address from "../../../components/form/address/Address.component";
 import type { IFaculty } from "../../../@types/interface/faculty.interface";
 import z from "zod";
@@ -12,8 +12,10 @@ import { IoMdClose } from "react-icons/io";
 import { FaSpinner } from "react-icons/fa";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
+import useDashboardContext from "../../../context/dashboard/useDashboardContext";
 
 function AddFacultyPage() {
+  const {setPageName} = useDashboardContext();
   const [formData, setFormData] = React.useState<IFaculty>({
     first_name: "",
     middle_name: "",
@@ -43,6 +45,11 @@ function AddFacultyPage() {
       pincode: "",
     },
   });
+
+  useEffect(() => {
+    setPageName("Add Faculty");
+  }, [setPageName]);
+
   const profilePhotoInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<
     | {
@@ -256,11 +263,12 @@ function AddFacultyPage() {
     if (profilePhotoInputRef.current) {
       profilePhotoInputRef.current.value = ""; // clear input field
     }
+
+   
   };
 
   return (
     <div className="flex w-full p-6 flex-col">
-      <h1 className="main-heading font-bold text-xl mb-5">Add Faculty</h1>
       <form
         noValidate
         onSubmit={handleSubmit}

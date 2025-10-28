@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import type { IStudent } from "../../../@types/interface/student.interface";
 import Address from "../../../components/form/address/Address.component";
 import { z } from "zod";
@@ -12,8 +12,10 @@ import api from "../../../config/axios.config";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { IoMdClose } from "react-icons/io";
+import useDashboardContext from "../../../context/dashboard/useDashboardContext";
 
 function AddStudentPage() {
+  const { setPageName } = useDashboardContext();
   const [formData, setFormData] = useState<IStudent>({
     first_name: "",
     middle_name: "",
@@ -43,6 +45,11 @@ function AddStudentPage() {
     year_of_passing: 0,
     remark: "",
   });
+
+  useEffect(() => {
+    setPageName("Add Student");
+  }, [setPageName]);
+
   const passportPhotoInputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<
     | {
@@ -261,7 +268,6 @@ function AddStudentPage() {
   };
   return (
     <div className="flex w-full p-6 flex-col">
-      <h1 className="main-heading font-bold text-xl mb-5">Add Student</h1>
       <form
         noValidate
         onSubmit={handleSubmit}

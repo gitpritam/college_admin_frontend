@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import type { INotice } from "../../@types/interface/notice.interface";
 import { noticeValidationSchema } from "../../validations/notice.validation";
 import z from "zod";
@@ -6,13 +6,19 @@ import api from "../../config/axios.config";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import { FaSpinner } from "react-icons/fa";
+import useDashboardContext from "../../context/dashboard/useDashboardContext";
 
 function AddNoticePage() {
+  const { setPageName } = useDashboardContext();
   const [formData, setFormData] = React.useState<INotice>({
     title: "",
     description: "",
     year: 0,
   });
+  useEffect(() => {
+      setPageName("Add Notice");
+    }, [setPageName]);
+  
   const [error, setError] = useState<
     | {
         title?: { errors: string[] };
@@ -88,7 +94,6 @@ function AddNoticePage() {
 
   return (
     <div className="flex w-full p-6 flex-col">
-      <h1 className="main-heading font-bold text-xl mb-5">Add Notice</h1>
       <form
         noValidate
         onSubmit={handleSubmit}
