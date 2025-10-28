@@ -20,6 +20,9 @@ import ContactUsPage from "../pages/contact/contactUs.page";
 import SignupPage from "../pages/auth/signup.pase";
 import MyProfilePage from "../pages/profile/profile.page";
 import SettingsPage from "../pages/settings/settings.page";
+import DashboardPage from "../context/dashboard/dashboard.page";
+
+
 
 const Router = createBrowserRouter([
   {
@@ -35,8 +38,8 @@ const Router = createBrowserRouter([
     ),
     children: [
       {
-        path: "dashboard", // /dashboard
-        element: <h1>Dashboard</h1>,
+        path: "dashboard", 
+        element: <DashboardPage />,
       },
       {
         path: "faculty",
