@@ -4,9 +4,10 @@ import { useNavigate } from "react-router";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
+  role?: string;
 }
 
-function ProtectedRoute({ children }: ProtectedRouteProps) {
+function ProtectedRoute({ children, role }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading } = useAuthContext();
   const navigate = useNavigate();
 

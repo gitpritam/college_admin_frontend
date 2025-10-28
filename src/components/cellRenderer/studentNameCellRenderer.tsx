@@ -23,7 +23,7 @@ function StudentNameCellRenderer({data}) {
         <IoPersonOutline  className="h-[7]! w-[7]!"/>
         </div>
       )}
-      <Link to="#"><h4 className="hover:underline">{fullName}</h4></Link>
+      <Link to={`/students/${data.student_id}`}><h4 className="hover:underline">{fullName}</h4></Link>
     </div>
   );
 }
