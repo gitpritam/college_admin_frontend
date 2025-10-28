@@ -19,6 +19,7 @@ import DashboardProvider from "../context/dashboard/dashboard.provider";
 import ContactUsPage from "../pages/contact/contactUs.page";
 import SignupPage from "../pages/auth/signup.pase";
 import MyProfilePage from "../pages/profile/profile.page";
+import SettingsPage from "../pages/settings/settings.page";
 
 const Router = createBrowserRouter([
   {
@@ -106,7 +107,7 @@ const Router = createBrowserRouter([
           {
             path: ":event_id", //param similar to url param in backend
             element: <EventPreview />,
-          },      
+          },
         ],
       },
       {
@@ -118,6 +119,14 @@ const Router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: "/profile",
+        element: <MyProfilePage />,
+      },
+      {
+        path: "/settings",
+        element: <SettingsPage />,
+      },
     ],
   },
   {
@@ -128,10 +137,7 @@ const Router = createBrowserRouter([
     path: "/signup",
     element: <SignupPage />,
   },
-  {
-    path: "/profile",
-    element: <MyProfilePage />,
-  },
+
   {
     path: "*",
     element: <NotFoundPage />,
