@@ -21,6 +21,7 @@ import SignupPage from "../pages/auth/signup.pase";
 import MyProfilePage from "../pages/profile/profile.page";
 import SettingsPage from "../pages/settings/settings.page";
 import DashboardPage from "../context/dashboard/dashboard.page";
+import PermissionPage from "../pages/permission/permission.page";
 
 
 
@@ -129,6 +130,10 @@ const Router = createBrowserRouter([
       {
         path: "/settings",
         element: <SettingsPage />,
+      },
+      {
+        path: "/permission",
+        element: <PermissionPage/>,
       },
     ],
   },

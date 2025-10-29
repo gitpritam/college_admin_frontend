@@ -18,9 +18,6 @@ function FacultyActionCellRenderer({ params }) {
     if (!result) return;
     console.log("This line works");
 
-    const handleFacultyPermission = async()=>{
-      navigate(`/permission/${data.faculty_id},${data.name}`)
-    }
 
     try {
       const response = await api.delete(`/faculty/${data.faculty_id}`);
@@ -32,6 +29,11 @@ function FacultyActionCellRenderer({ params }) {
       console.log(error);
     }
   };
+
+  const handleFacultyPermission = async () => {
+  navigate(`/permission/${data.faculty_id}/${data.name}`);
+}; 
+
   return (
     <div className="flex justify-center items-center gap-2">
       <button
