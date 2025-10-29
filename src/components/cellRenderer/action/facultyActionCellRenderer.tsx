@@ -2,6 +2,7 @@ import { MdOutlineDelete, MdOutlineRemoveRedEye } from "react-icons/md";
 import { useNavigate } from "react-router";
 import api from "../../../config/axios.config";
 import { toast } from "react-toastify";
+import { TbLockCheck } from "react-icons/tb";
 
 function FacultyActionCellRenderer({ params }) {
   const navigate = useNavigate();
@@ -16,6 +17,10 @@ function FacultyActionCellRenderer({ params }) {
     );
     if (!result) return;
     console.log("This line works");
+
+    const handleFacultyPermission = async()=>{
+      navigate(`/permission/${data.faculty_id},${data.name}`)
+    }
 
     try {
       const response = await api.delete(`/faculty/${data.faculty_id}`);
@@ -44,6 +49,15 @@ function FacultyActionCellRenderer({ params }) {
       >
         <MdOutlineDelete size={18} />
       </button>
+
+      <button
+        onClick={handleFacultyPermission}
+        title="Permission"
+        className="p-2 rounded-full text-red-600 hover:bg-red-100 transition-colors duration-200"
+      >
+        <TbLockCheck size={18} />
+      </button>
+
     </div>
   );
 }
