@@ -29,9 +29,9 @@ function FacultyActionCellRenderer({ params }) {
       console.log(error);
     }
   };
-
+console.log(data)
   const handleFacultyPermission = async () => {
-  navigate(`/permission/${data.faculty_id}/${data.name}`);
+  navigate(`/permission/${data.faculty_id}`);
 }; 
 
   return (

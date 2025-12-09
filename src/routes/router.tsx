@@ -133,7 +133,11 @@ const Router = createBrowserRouter([
       },
       {
         path: "/permission",
-        element: <PermissionPage/>,
+        children:[ {
+            path: ":faculty_id", //param similar to url param in backend
+            element: <PermissionPage/>,
+          },],
+        
       },
     ],
   },
